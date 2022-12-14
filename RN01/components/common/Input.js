@@ -1,7 +1,7 @@
 import {useState} from 'react';
 import { StyleSheet, View,  TextInput } from 'react-native';
 
-const Input = ({
+const PasswordInput = ({
   onChangeText,
   iconPosition,
   icon,
@@ -44,7 +44,7 @@ value,
   );
 };
 
-export default Input;
+export default PasswordInput;
 
 const styles = StyleSheet.create({
    inputWrapper: {

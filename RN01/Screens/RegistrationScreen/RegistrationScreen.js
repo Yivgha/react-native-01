@@ -3,7 +3,7 @@ import {
     KeyboardAvoidingView, Platform,
 } from 'react-native';
 import React, { useState } from 'react';
-import Input from '../../components/common/Input';
+import PasswordInput from '../../components/common/Input';
 import { useKeyboardStatus } from "../../hooks/isOpen";
 
 const noAvatar = require("../../assets/images/no-avatar-1x.png");
@@ -23,7 +23,7 @@ export default function RegistrationForm() {
                 textAlign={"left"} placeholder="Login" placeholderTextColor={"#BDBDBD"} />
               <TextInput style={{ ...styles.input, marginBottom: 16 }}
                 textAlign={"left"} placeholder="Email" placeholderTextColor={"#BDBDBD"} />
-              <Input
+              <PasswordInput
                  placeholder="Password"
                  icon={<TouchableOpacity onPress={() => setIsSecureEntry(prev => !prev)}>
                     <Text style={{ color: "#000000" }}>{isSecureEntry ? "Show" : "Hide"}</Text>

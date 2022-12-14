@@ -1,14 +1,16 @@
 import {
   StyleSheet, View, ImageBackground, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView,
-  Image, Text, TextInput, TouchableOpacity, 
+  Image, Text, TextInput, TouchableOpacity, Platform
 } from 'react-native';
-
 import React, { useState} from 'react';
 import RegistrationForm from './Screens/RegistrationScreen/RegistrationScreen';
-import Input from './components/common/Input';
+import AvatarInput from "./components/common/Avatar";
+import PasswordInput from './components/common/Input';
 import { useKeyboardStatus } from "./hooks/isOpen";
 
 const noAvatar = require("./assets/images/no-avatar-1x.png");
+const addBtnImg = require("./assets/images/add-btn.png");
+const deleteBtnImg = require("./assets/images/delete-btn.png");
 
 const bgImg = require("./assets/images/bg-img-1x.jpg");
 
@@ -39,7 +41,7 @@ export default function App() {
     console.log(JSON.stringify(state));
     setState(initialState);
   }
-  
+
   return (
     <TouchableWithoutFeedback onPress={keyboardHide} isShowKeyboard={isShowKeyboard}>
       <View style={styles.container}>
@@ -48,8 +50,10 @@ export default function App() {
             {/* <RegistrationForm />
              */}
 <View style={styles.form} >
-          <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"}>
-              <Image source={noAvatar} style={styles.noAvatar} />
+            <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"}>
+            
+              <AvatarInput />
+              
               <Text style={styles.title}>Registration</Text>
 
               <TextInput style={{ ...styles.input, marginBottom: 16 }} 
@@ -62,7 +66,7 @@ export default function App() {
                 textAlign={"left"} placeholder="Email" placeholderTextColor={"#BDBDBD"}
               onChangeText={value => setState((prevState) => ({...prevState, email: value}))}
               />
-              <Input
+              <PasswordInput
                  value={state.password}
                 placeholder="Password"
                  icon={<TouchableOpacity onPress={() => setIsSecureEntry(prev => !prev)}>
@@ -115,20 +119,13 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     color: "fff",
   },
-  noAvatar: {
-    width: 120,
-    height: 120,
-    backgroundColor: "#F6F6F6",
-    borderRadius: 16,
-    marginBottom: 32,
-    alignSelf: "center",
-  },
   title: {
     fontSize: 30,
     color: "#212121",
     textAlign: "center",
     lineHeight: 35,
-      letterSpacing: 0.01,
+    letterSpacing: 0.01,
+    marginTop: -30,
     marginBottom: 32,
     },
   formBtn: {
@@ -137,7 +134,6 @@ const styles = StyleSheet.create({
         height: 50,
         padding: 16,
     marginBottom: 16,
-              // marginTop: 40,
     marginTop: 24,
     },
     formBtnText: {
