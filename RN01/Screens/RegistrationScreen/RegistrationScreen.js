@@ -1,56 +1,80 @@
 import {
     StyleSheet, View, Image, Text, TextInput, TouchableOpacity,
-    KeyboardAvoidingView, Platform,
+    KeyboardAvoidingView, Platform, Keyboard
 } from 'react-native';
 import React, { useState } from 'react';
 import PasswordInput from '../../components/common/Input';
+import AvatarInput from "../../components/common/Avatar";
 import { useKeyboardStatus } from "../../hooks/isOpen";
 
 const noAvatar = require("../../assets/images/no-avatar-1x.png");
 
+const initialState = {
+  login: "",
+  email: "",
+  password: "",
+}
+
 export default function RegistrationForm() {
     const [isShowKeyboard, setIsShowKeyboard] = useState(false);
-    const isOpen = useKeyboardStatus();
+    const isOpen = useKeyboardStatus(true);
     const [isSecureEntry, setIsSecureEntry] = useState(true);
-    const [password, setPassword] = useState("");
+  const [state, setState] = useState(initialState);
+  
+  const submitForm = () => {
+    setIsShowKeyboard(true);
+    Keyboard.dismiss();
+    console.log(JSON.stringify(state));
+    setState(initialState);
+  }
 
     return (
-        <View style={styles.form} >
-          <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"}>
-              <Image source={noAvatar} style={styles.noAvatar} />
+       <View style={styles.form}>
+            <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"}>
+            
+              <AvatarInput />
+              
               <Text style={styles.title}>Registration</Text>
-              <TextInput style={{ ...styles.input, marginBottom: 16 }}
-                textAlign={"left"} placeholder="Login" placeholderTextColor={"#BDBDBD"} />
-              <TextInput style={{ ...styles.input, marginBottom: 16 }}
-                textAlign={"left"} placeholder="Email" placeholderTextColor={"#BDBDBD"} />
+
+              <TextInput style={{ ...styles.input, marginBottom: 16 }} 
+                value={state.login}
+                textAlign={"left"} placeholder="Login" placeholderTextColor={"#BDBDBD"}
+                onChangeText={value => setState((prevState) => ({ ...prevState, login: value }))}
+              />
+              <TextInput style={{ ...styles.input, marginBottom: 16 }} 
+                 value={state.email}
+                textAlign={"left"} placeholder="Email" placeholderTextColor={"#BDBDBD"}
+              onChangeText={value => setState((prevState) => ({...prevState, email: value}))}
+              />
               <PasswordInput
-                 placeholder="Password"
+                 value={state.password}
+                placeholder="Password"
                  icon={<TouchableOpacity onPress={() => setIsSecureEntry(prev => !prev)}>
                     <Text style={{ color: "#000000" }}>{isSecureEntry ? "Show" : "Hide"}</Text>
                    </TouchableOpacity>}
                  iconPosition="right"
                         autoCorrect={false}
                         secureTextEntry={isSecureEntry}
-                        value={password}
-                        onChangeText={text => setPassword(text)}
+                        onChangeText={value => setState((prevState) => ({...prevState, password: value}))}
                         enablesReturnKeyAutomatically
                         onFocus={() => {setIsShowKeyboard(false)}}
                     />
            
-            </KeyboardAvoidingView>
-            {isShowKeyboard ? isOpen && ( <View >
-              <TouchableOpacity activeOpacity={0.8} style={{ ...styles.formBtn}}>
+        </KeyboardAvoidingView>
+
+            {!isOpen && ( <View >
+              <TouchableOpacity activeOpacity={0.8} style={{ ...styles.formBtn}} onPress={submitForm}>
                 <Text  style={styles.formBtnText}>Register now</Text>
             </TouchableOpacity>
                     <Text style={styles.formText}>Do you have an account already? Log in</Text>
-            </View>) : null}
+            </View>)}
              </View>
     )
 };
 
 
 const styles = StyleSheet.create({
-   form: {
+  form: {
     backgroundColor: "#FFFFFF",
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
@@ -64,20 +88,13 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     color: "fff",
   },
-  noAvatar: {
-    width: 120,
-    height: 120,
-    backgroundColor: "#F6F6F6",
-    borderRadius: 16,
-    marginBottom: 32,
-    alignSelf: "center",
-  },
   title: {
     fontSize: 30,
     color: "#212121",
     textAlign: "center",
     lineHeight: 35,
-      letterSpacing: 0.01,
+    letterSpacing: 0.01,
+    marginTop: -30,
     marginBottom: 32,
     },
   formBtn: {
@@ -86,7 +103,7 @@ const styles = StyleSheet.create({
         height: 50,
         padding: 16,
     marginBottom: 16,
-              marginTop: 40,
+    marginTop: 24,
     },
     formBtnText: {
         color: "#fff",
