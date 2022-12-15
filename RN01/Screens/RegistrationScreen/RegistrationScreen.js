@@ -87,6 +87,7 @@ const styles = StyleSheet.create({
     padding: 16,
     borderRadius: 6,
     color: "fff",
+    fontFamily: "Roboto-Regular",
   },
   title: {
     fontSize: 30,
@@ -96,6 +97,7 @@ const styles = StyleSheet.create({
     letterSpacing: 0.01,
     marginTop: -30,
     marginBottom: 32,
+    fontFamily: "Roboto-Bold",
     },
   formBtn: {
         backgroundColor: "#FF6C00",
@@ -110,14 +112,15 @@ const styles = StyleSheet.create({
         fontSize: 16,
         lineHeight: 19,
       textAlign: "center",
-
+fontFamily: "Roboto-Regular",
     },
     formText: {
         color: "#1B4371",
         fontSize: 16,
         lineHeight: 19,
-      paddingHorizontal: 20,
-        marginBottom: 45,
+      paddingHorizontal: 40,
+      marginBottom: 45,
+        fontFamily: "Roboto-Regular",
     }
 })
 

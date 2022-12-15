@@ -59,6 +59,7 @@ const styles = StyleSheet.create({
     },
     formInput: {
          flex: 1,
-        width: '100%',
+      width: '100%',
+        fontFamily: "Roboto-Regular",
     },
 })
