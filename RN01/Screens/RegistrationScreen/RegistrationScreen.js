@@ -13,7 +13,10 @@ import AvatarInput from '../../components/common/Avatar'
 import { useKeyboardStatus } from '../../hooks/isOpen'
 import CustomInput from '../../components/common/CustomTextInput'
 
+const noAvatar = require('../../assets/images/no-avatar-1x.png')
+
 const initialState = {
+    photo: noAvatar,
     login: '',
     email: '',
     password: '',
@@ -37,7 +40,7 @@ export default function RegistrationForm() {
             <KeyboardAvoidingView
                 behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             >
-                <AvatarInput />
+                <AvatarInput value={state.photo} />
 
                 <Text style={styles.title}>Registration</Text>
 
