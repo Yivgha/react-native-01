@@ -1,17 +1,19 @@
 import React, { useState, useCallback } from 'react'
 import { useFonts } from 'expo-font'
 import * as SplashScreen from 'expo-splash-screen'
-import RegistrationForm from './Screens/RegistrationScreen/RegistrationScreen'
-import LoginForm from './Screens/LoginScreen/LoginScreen'
-
 import {
     StyleSheet,
     View,
     ImageBackground,
     TouchableWithoutFeedback,
     Keyboard,
-    Text,
+    LogBox,
 } from 'react-native'
+import RegistrationForm from './Screens/RegistrationScreen/RegistrationScreen'
+import LoginForm from './Screens/LoginScreen/LoginScreen'
+
+LogBox.ignoreLogs(['Warning: ...'])
+LogBox.ignoreAllLogs()
 
 SplashScreen.preventAutoHideAsync()
 
