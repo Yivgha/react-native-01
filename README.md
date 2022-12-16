@@ -1,5 +1,9 @@
 # react-native-01
 
+HW02:
+Android Emulator: https://ibb.co/PC7WT3S
+Mobile: https://ibb.co/rynNMJz
+
 Скріни:
 
 desktop(web): https://ibb.co/HP1zLcR
