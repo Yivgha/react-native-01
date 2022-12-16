@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState } from 'react'
 import { StyleSheet, View, Image, TouchableOpacity } from 'react-native'
 import * as ImagePicker from 'expo-image-picker'
 
@@ -6,7 +6,7 @@ const noAvatar = require('../../assets/images/no-avatar-1x.png')
 const addBtnImg = require('../../assets/images/add-btn.png')
 const deleteBtnImg = require('../../assets/images/cancel-circle.png')
 
-const AvatarInput = () => {
+const AvatarInput = ({ value, onChange, style, ...props }) => {
     const [image, setImage] = useState(null)
 
     const pickImage = async () => {
@@ -16,7 +16,6 @@ const AvatarInput = () => {
             aspect: [1, 1],
             quality: 1,
         })
-
         if (!result.canceled) {
             setImage(result.assets[0].uri)
         } else {
@@ -38,8 +37,11 @@ const AvatarInput = () => {
             {image ? (
                 image && (
                     <Image
+                        value={value}
                         source={{ uri: image }}
-                        style={{ width: 120, height: 120 }}
+                        style={[{ width: 120, height: 120 }, style]}
+                        onChange={onChange}
+                        {...props}
                     />
                 )
             ) : (

@@ -6,17 +6,22 @@ import {
     KeyboardAvoidingView,
     Platform,
     Keyboard,
+    Dimensions,
 } from 'react-native'
 import React, { useState } from 'react'
 import PasswordInput from '../../components/common/Input'
 import AvatarInput from '../../components/common/Avatar'
-import { useKeyboardStatus } from '../../hooks/isOpen'
 import CustomInput from '../../components/common/CustomTextInput'
+import { useKeyboardStatus } from '../../hooks/isOpen'
+import { useOrientation } from '../../hooks/screenOrientation'
 
-const noAvatar = require('../../assets/images/no-avatar-1x.png')
+const units = {
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height,
+}
 
 const initialState = {
-    photo: noAvatar,
+    photo: '',
     login: '',
     email: '',
     password: '',
@@ -34,16 +39,34 @@ export default function RegistrationForm() {
         console.log(JSON.stringify(state))
         setState(initialState)
     }
+    const orientation = useOrientation()
 
     return (
-        <View style={styles.form} isShowKeyboard={isShowKeyboard}>
+        <View
+            style={[
+                styles.form,
+                {
+                    width:
+                        orientation === 'PORTRAIT'
+                            ? units.width / 1
+                            : units.height / 1,
+                },
+            ]}
+            isShowKeyboard={isShowKeyboard}
+        >
             <KeyboardAvoidingView
                 behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             >
-                <AvatarInput value={state.photo} />
-
+                <AvatarInput
+                    value={state.photo}
+                    onChange={(value) => {
+                        setState((prevState) => ({
+                            ...prevState,
+                            photo: value,
+                        }))
+                    }}
+                />
                 <Text style={styles.title}>Registration</Text>
-
                 <CustomInput
                     value={state.login}
                     placeholder="Login"

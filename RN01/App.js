@@ -8,6 +8,7 @@ import {
     TouchableWithoutFeedback,
     Keyboard,
     LogBox,
+    Dimensions,
 } from 'react-native'
 import RegistrationForm from './Screens/RegistrationScreen/RegistrationScreen'
 import LoginForm from './Screens/LoginScreen/LoginScreen'
@@ -16,6 +17,11 @@ LogBox.ignoreLogs(['Warning: ...'])
 LogBox.ignoreAllLogs()
 
 SplashScreen.preventAutoHideAsync()
+
+const units = {
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height,
+}
 
 const bgImg = require('./assets/images/bg-img-1x.jpg')
 
@@ -62,10 +68,14 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#fff',
+        width: units.width / 1,
+        height: units.height / 1,
     },
     image: {
         flex: 1,
         resizeMode: 'cover',
         justifyContent: 'flex-end',
+        width: units.width / 1,
+        height: units.height / 1,
     },
 })
