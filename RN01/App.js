@@ -10,8 +10,8 @@ import {
     LogBox,
     Dimensions,
 } from 'react-native'
-import RegistrationForm from './Screens/RegistrationScreen/RegistrationScreen'
-import LoginForm from './Screens/LoginScreen/LoginScreen'
+import RegistrationForm from './src/Screens/RegistrationScreen/RegistrationScreen'
+import LoginForm from './src/Screens/LoginScreen/LoginScreen'
 
 LogBox.ignoreLogs(['Warning: ...'])
 LogBox.ignoreAllLogs()
