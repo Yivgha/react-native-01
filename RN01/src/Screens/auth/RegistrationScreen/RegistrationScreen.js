@@ -30,7 +30,7 @@ const initialState = {
 }
 const bgImg = require('../../../../assets/images/bg-img-1x.jpg')
 
-export default function RegistrationForm() {
+export default function RegistrationForm({ navigation }) {
     const [isShowKeyboard, setIsShowKeyboard] = useState(false)
     const isOpen = useKeyboardStatus(true)
     const [isSecureEntry, setIsSecureEntry] = useState(true)
@@ -148,9 +148,13 @@ export default function RegistrationForm() {
                                         Register now
                                     </Text>
                                 </TouchableOpacity>
-                                <Text style={styles.formText}>
-                                    Do you have an account already? Log in
-                                </Text>
+                                <TouchableOpacity
+                                    onPress={() => navigation.navigate('Login')}
+                                >
+                                    <Text style={styles.formText}>
+                                        Do you have an account already? Log in
+                                    </Text>
+                                </TouchableOpacity>
                             </View>
                         )}
                     </View>

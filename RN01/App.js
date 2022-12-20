@@ -34,10 +34,15 @@ export default function App() {
         <NavigationContainer onLayout={onLayoutRootView}>
             <AuthStack.Navigator>
                 <AuthStack.Screen
+                    options={{ headerShown: false }}
                     name="Register"
                     component={RegistrationForm}
                 />
-                <AuthStack.Screen name="Login" component={LoginForm} />
+                <AuthStack.Screen
+                    options={{ headerShown: false }}
+                    name="Login"
+                    component={LoginForm}
+                />
             </AuthStack.Navigator>
         </NavigationContainer>
     )
