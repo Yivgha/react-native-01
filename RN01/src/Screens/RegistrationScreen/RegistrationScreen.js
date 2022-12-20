@@ -21,7 +21,6 @@ const units = {
 }
 
 const initialState = {
-    photo: '',
     login: '',
     email: '',
     password: '',

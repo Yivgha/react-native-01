@@ -7,7 +7,7 @@ const addBtnImg = require('../../../assets/images/add-btn.png')
 const deleteBtnImg = require('../../../assets/images/cancel-circle.png')
 
 const AvatarInput = ({ value, onChange, style, ...props }) => {
-    const [image, setImage] = useState(null)
+    const [image, setImage] = useState('')
 
     const pickImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
@@ -24,7 +24,7 @@ const AvatarInput = ({ value, onChange, style, ...props }) => {
     }
 
     const onReset = () => {
-        setImage(null)
+        setImage('')
     }
 
     return (
