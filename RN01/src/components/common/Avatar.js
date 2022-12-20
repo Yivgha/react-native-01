@@ -2,9 +2,9 @@ import { useState } from 'react'
 import { StyleSheet, View, Image, TouchableOpacity } from 'react-native'
 import * as ImagePicker from 'expo-image-picker'
 
-const noAvatar = require('../../assets/images/no-avatar-1x.png')
-const addBtnImg = require('../../assets/images/add-btn.png')
-const deleteBtnImg = require('../../assets/images/cancel-circle.png')
+const noAvatar = require('../../../assets/images/no-avatar-1x.png')
+const addBtnImg = require('../../../assets/images/add-btn.png')
+const deleteBtnImg = require('../../../assets/images/cancel-circle.png')
 
 const AvatarInput = ({ value, onChange, style, ...props }) => {
     const [image, setImage] = useState(null)
