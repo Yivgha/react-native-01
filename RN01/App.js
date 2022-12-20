@@ -1,42 +1,22 @@
-import React, { useState, useCallback } from 'react'
+import React, { useCallback } from 'react'
 import { useFonts } from 'expo-font'
 import * as SplashScreen from 'expo-splash-screen'
-import {
-    StyleSheet,
-    View,
-    ImageBackground,
-    TouchableWithoutFeedback,
-    Keyboard,
-    LogBox,
-    Dimensions,
-} from 'react-native'
-import RegistrationForm from './src/Screens/RegistrationScreen/RegistrationScreen'
-import LoginForm from './src/Screens/LoginScreen/LoginScreen'
+import { LogBox } from 'react-native'
+import { createStackNavigator } from '@react-navigation/stack'
+import { NavigationContainer } from '@react-navigation/native'
+import RegistrationForm from './src/Screens/auth/RegistrationScreen/RegistrationScreen'
+import LoginForm from './src/Screens/auth/LoginScreen/LoginScreen'
 
 LogBox.ignoreLogs(['Warning: ...'])
 LogBox.ignoreAllLogs()
 
-SplashScreen.preventAutoHideAsync()
-
-const units = {
-    width: Dimensions.get('window').width,
-    height: Dimensions.get('window').height,
-}
-
-const bgImg = require('./assets/images/bg-img-1x.jpg')
+// SplashScreen.preventAutoHideAsync()
 
 export default function App() {
     const [fontsLoaded] = useFonts({
         'Roboto-Regular': require('./assets/fonts/Roboto/Roboto-Regular.ttf'),
         'Roboto-Bold': require('./assets/fonts/Roboto/Roboto-Bold.ttf'),
     })
-
-    const [isShowKeyboard, setIsShowKeyboard] = useState(false)
-
-    const keyboardHide = () => {
-        setIsShowKeyboard(true)
-        Keyboard.dismiss()
-    }
 
     const onLayoutRootView = useCallback(async () => {
         if (fontsLoaded) {
@@ -48,34 +28,17 @@ export default function App() {
         return null
     }
 
+    const AuthStack = createStackNavigator()
+
     return (
-        <TouchableWithoutFeedback
-            onPress={keyboardHide}
-            isShowKeyboard={isShowKeyboard}
-            onLayout={onLayoutRootView}
-        >
-            <View style={styles.container}>
-                <ImageBackground source={bgImg} style={styles.image}>
-                    <RegistrationForm />
-                    {/* <LoginForm /> */}
-                </ImageBackground>
-            </View>
-        </TouchableWithoutFeedback>
+        <NavigationContainer onLayout={onLayoutRootView}>
+            <AuthStack.Navigator>
+                <AuthStack.Screen
+                    name="Register"
+                    component={RegistrationForm}
+                />
+                <AuthStack.Screen name="Login" component={LoginForm} />
+            </AuthStack.Navigator>
+        </NavigationContainer>
     )
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        width: units.width / 1,
-        height: units.height / 1,
-    },
-    image: {
-        flex: 1,
-        resizeMode: 'cover',
-        justifyContent: 'flex-end',
-        width: units.width / 1,
-        height: units.height / 1,
-    },
-})
