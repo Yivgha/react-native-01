@@ -15,7 +15,6 @@ import {
 import PasswordInput from '../../../components/common/Input'
 import CustomInput from '../../../components/common/CustomTextInput'
 import { useKeyboardStatus } from '../../../hooks/isOpen'
-import { useOrientation } from '../../../hooks/screenOrientation'
 
 const units = {
     width: Dimensions.get('window').width,
@@ -40,7 +39,6 @@ export default function LoginForm({ navigation }) {
         console.log(JSON.stringify(state))
         setState(initialState)
     }
-    const orientation = useOrientation()
 
     const keyboardHide = () => {
         setIsShowKeyboard(true)
@@ -53,18 +51,7 @@ export default function LoginForm({ navigation }) {
         >
             <View style={styles.container}>
                 <ImageBackground source={bgImg} style={styles.image}>
-                    <View
-                        style={[
-                            styles.form,
-                            {
-                                width:
-                                    orientation === 'PORTRAIT'
-                                        ? units.width / 1
-                                        : units.height / 1,
-                            },
-                        ]}
-                        isShowKeyboard={isShowKeyboard}
-                    >
+                    <View style={[styles.form]} isShowKeyboard={isShowKeyboard}>
                         <KeyboardAvoidingView
                             behavior={
                                 Platform.OS === 'ios' ? 'padding' : 'height'
@@ -126,15 +113,30 @@ export default function LoginForm({ navigation }) {
                                         Log in
                                     </Text>
                                 </TouchableOpacity>
-                                <TouchableOpacity
-                                    onPress={() =>
-                                        navigation.navigate('Register')
-                                    }
+                                <View
+                                    style={{
+                                        flexDirection: 'row',
+                                        justifyContent: 'center',
+                                    }}
                                 >
-                                    <Text style={styles.formText}>
-                                        Don't have an account yet? Sign up
+                                    <Text
+                                        style={[
+                                            styles.formText,
+                                            { marginRight: 5 },
+                                        ]}
+                                    >
+                                        Don't have an account yet?
                                     </Text>
-                                </TouchableOpacity>
+                                    <TouchableOpacity
+                                        onPress={() =>
+                                            navigation.navigate('Register')
+                                        }
+                                    >
+                                        <Text style={styles.formText}>
+                                            Sign up
+                                        </Text>
+                                    </TouchableOpacity>
+                                </View>
                             </View>
                         )}
                     </View>
@@ -197,8 +199,6 @@ const styles = StyleSheet.create({
     },
     formText: {
         color: '#1B4371',
-        marginLeft: 'auto',
-        marginRight: 'auto',
         marginBottom: 111,
         fontFamily: 'Roboto-Regular',
         fontSize: 16,
