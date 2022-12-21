@@ -58,7 +58,7 @@ function HomeScreen({ navigation: { navigate } }) {
 
                     headerTintColor: '#212121',
                     headerTitleStyle: {
-                        fontWeight: 'bold',
+                        fontFamily: 'Roboto-Bold',
                         fontSize: 17,
                         lineHeight: 19,
                         paddingTop: 11,
@@ -72,7 +72,7 @@ function HomeScreen({ navigation: { navigate } }) {
                                 name="log-out"
                                 size={24}
                                 color="#BDBDBD"
-                                style={{ marginRight: 10 }}
+                                style={{ marginRight: 16 }}
                             />
                         </TouchableOpacity>
                     ),
@@ -92,7 +92,7 @@ function HomeScreen({ navigation: { navigate } }) {
 
                     headerTintColor: '#212121',
                     headerTitleStyle: {
-                        fontWeight: 'bold',
+                        fontFamily: 'Roboto-Bold',
                         fontSize: 17,
                         lineHeight: 22,
                         paddingTop: 11,

@@ -1,13 +1,6 @@
 import { Feather } from '@expo/vector-icons'
 import { FontAwesome } from '@expo/vector-icons'
-import {
-    View,
-    Text,
-    StyleSheet,
-    TouchableWithoutFeedback,
-    ImageBackground,
-    Image,
-} from 'react-native'
+import { View, Text, StyleSheet, ImageBackground, Image } from 'react-native'
 import React, { useState } from 'react'
 import AvatarInput from '../../components/common/Avatar'
 import { TouchableOpacity } from 'react-native-gesture-handler'
@@ -28,15 +21,18 @@ function ProfileScreen({ navigate }) {
                                 name="log-out"
                                 size={24}
                                 color="#BDBDBD"
-                                style={{ marginLeft: 80 }}
+                                style={{
+                                    marginLeft: 80,
+                                    marginBottom: 30,
+                                }}
                             />
                         </TouchableOpacity>
                     </View>
-                    <Text style={styles.title}>Title</Text>
+                    <Text style={styles.title}>User Login</Text>
 
                     <View style={styles.postContainer}>
                         <Image
-                            source={require('../../../assets/images/bg-img-1x.jpg')}
+                            source={require('../../../assets/images/posts/forest.jpg')}
                             style={styles.postImage}
                         />
                         <Text style={styles.postTitle}>title</Text>
@@ -47,6 +43,9 @@ function ProfileScreen({ navigate }) {
                                         name="commenting-o"
                                         size={24}
                                         color="#FF6C00"
+                                        style={{
+                                            transform: [{ rotateY: '180deg' }],
+                                        }}
                                     />
                                     <Text style={styles.iconText}>8</Text>
                                 </TouchableOpacity>
@@ -89,11 +88,11 @@ const styles = StyleSheet.create({
         borderTopLeftRadius: 25,
         borderTopRightRadius: 25,
         paddingHorizontal: 16,
-        paddingTop: 22,
     },
     topBox: {
         flexDirection: 'row',
         justifyContent: 'flex-end',
+        alignItems: 'center',
     },
     title: {
         fontFamily: 'Roboto-Bold',
