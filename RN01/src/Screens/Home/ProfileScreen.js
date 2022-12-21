@@ -101,6 +101,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         lineHeight: 35,
         letterSpacing: 0.01,
+        marginTop: -30,
         marginBottom: 32,
     },
     postContainer: {
