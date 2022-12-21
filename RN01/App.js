@@ -2,10 +2,8 @@ import React, { useCallback } from 'react'
 import { useFonts } from 'expo-font'
 import * as SplashScreen from 'expo-splash-screen'
 import { LogBox } from 'react-native'
-import { createStackNavigator } from '@react-navigation/stack'
 import { NavigationContainer } from '@react-navigation/native'
-import RegistrationForm from './src/Screens/auth/RegistrationScreen/RegistrationScreen'
-import LoginForm from './src/Screens/auth/LoginScreen/LoginScreen'
+import useRoute from './src/router/router'
 
 LogBox.ignoreLogs(['Warning: ...'])
 LogBox.ignoreAllLogs()
@@ -28,22 +26,11 @@ export default function App() {
         return null
     }
 
-    const AuthStack = createStackNavigator()
+    const routing = useRoute(true)
 
     return (
         <NavigationContainer onLayout={onLayoutRootView}>
-            <AuthStack.Navigator>
-                <AuthStack.Screen
-                    options={{ headerShown: false }}
-                    name="Register"
-                    component={RegistrationForm}
-                />
-                <AuthStack.Screen
-                    options={{ headerShown: false }}
-                    name="Login"
-                    component={LoginForm}
-                />
-            </AuthStack.Navigator>
+            {routing}
         </NavigationContainer>
     )
 }
