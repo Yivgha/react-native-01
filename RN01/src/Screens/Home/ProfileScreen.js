@@ -6,8 +6,9 @@ import AvatarInput from '../../components/common/Avatar'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 const bgImg = require('../../../assets/images/bg-img-1x.jpg')
 
-function ProfileScreen({ navigate }) {
-    const [posts, setPosts] = useState([])
+function ProfileScreen(isAuth) {
+    const [posts, setPosts] = useState([]);
+
     return (
         <View style={styles.wrapper}>
             <ImageBackground source={bgImg} style={styles.image}>
@@ -15,7 +16,7 @@ function ProfileScreen({ navigate }) {
                     <View style={styles.topBox}>
                         <AvatarInput />
                         <TouchableOpacity
-                            onPress={() => navigate('Login', { name: 'Login' })}
+                            onPress={()=> !isAuth }
                         >
                             <Feather
                                 name="log-out"
@@ -30,7 +31,8 @@ function ProfileScreen({ navigate }) {
                     </View>
                     <Text style={styles.title}>User Login</Text>
 
-                    <View style={styles.postContainer}>
+                    {isAuth && (
+                        <View style={styles.postContainer}>
                         <Image
                             source={require('../../../assets/images/posts/forest.jpg')}
                             style={styles.postImage}
@@ -68,6 +70,7 @@ function ProfileScreen({ navigate }) {
                             </View>
                         </View>
                     </View>
+                    )}
                 </View>
             </ImageBackground>
         </View>

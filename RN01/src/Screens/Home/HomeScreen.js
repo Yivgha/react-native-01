@@ -9,7 +9,7 @@ import ProfileScreen from './ProfileScreen'
 
 const MainTab = createBottomTabNavigator()
 
-function HomeScreen({ navigation: { navigate } }) {
+function HomeScreen(isAuth) {
     return (
         <MainTab.Navigator
             initialRouteName="Posts"
@@ -66,7 +66,7 @@ function HomeScreen({ navigation: { navigate } }) {
                     },
                     headerRight: () => (
                         <TouchableOpacity
-                            onPress={() => navigate('Login', { name: 'Login' })}
+                            onPress={() => !isAuth}
                         >
                             <Feather
                                 name="log-out"
