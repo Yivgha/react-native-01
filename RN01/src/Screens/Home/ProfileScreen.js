@@ -15,8 +15,7 @@ function ProfileScreen(isAuth) {
                 <View style={styles.container}>
                     <View style={styles.topBox}>
                         <AvatarInput />
-                        <TouchableOpacity
-                            onPress={()=> !isAuth }
+                        <TouchableOpacity onPress={()=>{console.log("Touched log out on Profile");}}
                         >
                             <Feather
                                 name="log-out"

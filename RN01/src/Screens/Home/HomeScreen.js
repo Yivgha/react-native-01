@@ -66,7 +66,7 @@ function HomeScreen(isAuth) {
                     },
                     headerRight: () => (
                         <TouchableOpacity
-                            onPress={() => !isAuth}
+                            onPress={() => {console.log("Pressed log out");}}
                         >
                             <Feather
                                 name="log-out"
