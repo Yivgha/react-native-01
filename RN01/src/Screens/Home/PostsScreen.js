@@ -3,7 +3,8 @@ import React from 'react'
 
 const basicAvatar = require('../../../assets/images/avatars/avatar-1-2x.png')
 
-function PostsScreen() {
+function PostsScreen({ route }) {
+    // console.log("route", route.params);
     return (
         <View style={styles.wrapper}>
             <View style={styles.userContainer}>
