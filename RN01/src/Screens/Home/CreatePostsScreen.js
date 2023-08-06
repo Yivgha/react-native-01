@@ -7,6 +7,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import { Camera, CameraType } from 'expo-camera'
 import * as MediaLibrary from 'expo-media-library'
 import { useIsFocused } from '@react-navigation/native';
+import * as Location from "expo-location";
 
 function CreatePostsScreen({ navigation }, props) {
     const isFocused = useIsFocused()
@@ -16,14 +17,18 @@ function CreatePostsScreen({ navigation }, props) {
     const [hasPermission, setHasPermission] = useState(null);
     const [type, setType] = useState(CameraType.back);
 
+    const [location, setLocation] = useState(null);
+    
     const takePhoto = async () => {
         if (photo === "") {
             const photo = await camera.takePictureAsync();
-        console.log("Snap taken", photo.uri);
+            const location = await Location.getCurrentPositionAsync();
+        // console.log("Snap taken", photo.uri);
+            console.log("location", location);
         setPhoto(photo.uri);
         await MediaLibrary.createAssetAsync(photo.uri);
         } else {
-            deletePhoto();
+            setPhoto("");
         }
         
     };
@@ -57,10 +62,12 @@ function CreatePostsScreen({ navigation }, props) {
      useEffect(() => {
          (async () => {
              const { status } = await Camera.requestCameraPermissionsAsync();
+             await Location.requestForegroundPermissionsAsync();
         await MediaLibrary.requestPermissionsAsync();
-      setHasPermission(status === "granted");
-    })();
-  }, [photo, camera]);
+             setHasPermission(status === "granted");
+         })();  
+     }, [photo, camera]);
+  
 
   if (hasPermission === null) {
       console.log("Has permission");
