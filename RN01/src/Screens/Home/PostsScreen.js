@@ -1,10 +1,20 @@
-import { View, Text, StyleSheet, Image } from 'react-native'
-import React from 'react'
+import { View, Text, StyleSheet, Image, FlatList } from 'react-native'
+import React, {useState, useEffect} from 'react'
 
 const basicAvatar = require('../../../assets/images/avatars/avatar-1-2x.png')
 
 function PostsScreen({ route }) {
-    // console.log("route", route.params);
+    const [posts, setPosts] = useState([]);
+
+    useEffect(() => {
+        if (route.params) {
+             setPosts(prevState => [...prevState, route.params]);
+        }
+    }, [route.params]);
+    
+
+    
+console.log(posts);
     return (
         <View style={styles.wrapper}>
             <View style={styles.userContainer}>
@@ -20,8 +30,14 @@ function PostsScreen({ route }) {
                     <Text style={styles.userMail}>email@example.com</Text>
                 </View>
             </View>
-            <View>
-                <Text>Some post</Text>
+            <View style={styles.flatList}>
+                <FlatList data={posts}
+                    keyExtractor={(item, idx) => idx.toString()}
+                    renderItem={({ item }) => (
+                        <View style={{marginBottom: 10, height: 250, width: 350}} >
+                            <Image source={{ uri: item.photo }} style={{marginHorizontal: "auto", height: 250, width: 350}} />
+                        </View>
+                  )} />
             </View>
         </View>
     )
@@ -62,6 +78,11 @@ const styles = StyleSheet.create({
         color: 'rgba(33, 33, 33, 0.8)',
         fontSize: 11,
         lineHeight: 13,
+    },
+    flatList: {
+        flex: 1,
+        justifyContent: "center",
+        overflow: "scroll",
     },
 })
 
