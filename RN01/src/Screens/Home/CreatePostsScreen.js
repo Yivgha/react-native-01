@@ -6,8 +6,10 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import React, { useState, useEffect, useRef } from 'react'
 import { Camera, CameraType } from 'expo-camera'
 import * as MediaLibrary from 'expo-media-library'
+import { useIsFocused } from '@react-navigation/native';
 
-function CreatePostsScreen({navigation}) {
+function CreatePostsScreen({ navigation }, props) {
+    const isFocused = useIsFocused()
     const [camera, setCamera] = useState(null);
     const [photo, setPhoto] = useState("");
 
@@ -39,6 +41,7 @@ function CreatePostsScreen({navigation}) {
         if (photo !== "") {
         console.log("Posting");
             navigation.navigate("Posts", { photo });
+            deletePhoto();
         }
     };
 
@@ -57,7 +60,7 @@ function CreatePostsScreen({navigation}) {
         await MediaLibrary.requestPermissionsAsync();
       setHasPermission(status === "granted");
     })();
-  }, []);
+  }, [photo, camera]);
 
   if (hasPermission === null) {
       console.log("Has permission");
@@ -71,9 +74,9 @@ function CreatePostsScreen({navigation}) {
     return (
         <View style={styles.wrapper}>
             <View style={styles.uploadBox}>
-                <Camera style={styles.camera} type={type} ref={setCamera}>
+                {isFocused && <Camera style={styles.camera} type={type} ref={setCamera}>
                     <View style={styles.takePhotoContainer}>
-                       <Image source={photo.uri} style={{ height: 40, width: 40 }} />
+                        <Image source={{ uri: photo }} style={{ height: "100%", width: "100%" }} />
                     </View>
                     <TouchableOpacity onPress={flipCamera} style={styles.flipBox}>
                         <MaterialCommunityIcons name="camera-flip-outline" size={30} color="#fff" />
@@ -81,7 +84,7 @@ function CreatePostsScreen({navigation}) {
                     <TouchableOpacity style={styles.snapBox} onPress={takePhoto}>
                         <FontAwesome name="camera" size={24} color="#BDBDBD" />
                     </TouchableOpacity>
-                </Camera>
+                </Camera>}
                 <Text style={styles.mainText}>Upload photo</Text>
             </View>
             <View>
