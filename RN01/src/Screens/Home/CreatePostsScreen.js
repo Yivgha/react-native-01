@@ -2,31 +2,82 @@ import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native'
 import { AntDesign } from '@expo/vector-icons'
 import { Feather } from '@expo/vector-icons'
 import { FontAwesome } from '@expo/vector-icons'
+import { MaterialCommunityIcons } from '@expo/vector-icons'; 
 import React, { useState, useEffect, useRef } from 'react'
-import { Camera } from 'expo-camera'
+import { Camera, CameraType } from 'expo-camera'
 import * as MediaLibrary from 'expo-media-library'
 
 function CreatePostsScreen({navigation}) {
     const [camera, setCamera] = useState(null);
     const [photo, setPhoto] = useState("");
 
+    const [hasPermission, setHasPermission] = useState(null);
+    const [type, setType] = useState(CameraType.back);
+
     const takePhoto = async () => {
-        const photo = await camera.takePictureAsync();
-        console.log("Snap taken");
+        if (photo === "") {
+            const photo = await camera.takePictureAsync();
+        console.log("Snap taken", photo.uri);
         setPhoto(photo.uri);
+        await MediaLibrary.createAssetAsync(photo.uri);
+        } else {
+            deletePhoto();
+        }
+        
+    };
+
+
+    const flipCamera = () => {
+        setType(
+            type === CameraType.back
+                ? CameraType.front
+                : CameraType.back
+        );
     };
 
     const sendPhoto = () => {
-        navigation.navigate("Posts", {photo});
+        if (photo !== "") {
+        console.log("Posting");
+            navigation.navigate("Posts", { photo });
+        }
+    };
+
+    const deletePhoto = () => {
+        if (photo !== "") {
+            console.log("Deleted");
+            setPhoto("");
+        } else {
+            console.log("Nothing to delete");
+        }
     }
+
+     useEffect(() => {
+         (async () => {
+             const { status } = await Camera.requestCameraPermissionsAsync();
+        await MediaLibrary.requestPermissionsAsync();
+      setHasPermission(status === "granted");
+    })();
+  }, []);
+
+  if (hasPermission === null) {
+      console.log("Has permission");
+      return <View />
+  }
+    if (hasPermission === false) {
+      console.log("No access to camera");
+    return <Text>Enable access for Camera to proceed</Text>;
+    }
+    
     return (
         <View style={styles.wrapper}>
             <View style={styles.uploadBox}>
-                <Camera style={styles.camera} ref={setCamera}>
-                    {/* {photo && (<View style={styles.takePhotoContainer}>
-                        <Image source={{ uri: photo }} style={ {height: 240, width: "100%"}} />
-                    </View>)} */}
-                    
+                <Camera style={styles.camera} type={type} ref={setCamera}>
+                    <View style={styles.takePhotoContainer}>
+                       <Image source={photo.uri} style={{ height: 40, width: 40 }} />
+                    </View>
+                    <TouchableOpacity onPress={flipCamera} style={styles.flipBox}>
+                        <MaterialCommunityIcons name="camera-flip-outline" size={30} color="#fff" />
+                    </TouchableOpacity>
                     <TouchableOpacity style={styles.snapBox} onPress={takePhoto}>
                         <FontAwesome name="camera" size={24} color="#BDBDBD" />
                     </TouchableOpacity>
@@ -39,11 +90,11 @@ function CreatePostsScreen({navigation}) {
                 </TouchableOpacity>
             </View>
             <View>
-                <TouchableOpacity style={styles.deleteBtn} onPress={()=>{}}>
-<AntDesign name="delete" size={20} color="#BDBDBD"/>
+                <TouchableOpacity style={styles.deleteBtn} onPress={deletePhoto}>
+            <AntDesign name="delete" size={20} color="#BDBDBD"/>
                 </TouchableOpacity>
             </View>
-            {/* <Text style={styles.mainText}>Upload photo</Text>
+            {/* 
             <View style={styles.nameBox}>
                 <Text style={styles.mainText}>Name...</Text>
             </View>
@@ -110,6 +161,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 'auto',
         marginBottom: 16,
         height: 350,
+        position: "relative",
     },
     camera: {
         height: 250,
@@ -130,12 +182,20 @@ const styles = StyleSheet.create({
     },
     takePhotoContainer: {
         position: "absolute",
-        top: 0,
-        left: 0,
+        top: 10,
+        left: 10,
         borderColor: "#fff",
         borderWidth: 1,
-        height: 240,
-        width: "100%",
+        height: 40,
+        width: 40,
+    },
+    flipBox: {
+        position: "absolute",
+        top: 10,
+        right: 10,
+        height: 30,
+        width: 30,
+        color: "#fff",
     },
     sendBtn: {
         width: 300,
