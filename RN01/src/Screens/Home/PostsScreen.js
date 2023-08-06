@@ -8,7 +8,7 @@ function PostsScreen({ route }) {
 
     useEffect(() => {
         if (route.params) {
-             setPosts(prevState => [...prevState, route.params]);
+            setPosts(prevState => [...prevState, route.params]);
         }
     }, [route.params]);
     
@@ -34,7 +34,7 @@ console.log(posts);
                 <FlatList data={posts}
                     keyExtractor={(item, idx) => idx.toString()}
                     renderItem={({ item }) => (
-                        <View style={{marginBottom: 10, height: 250, width: 350}} >
+                        <View style={{marginBottom: 10, height: 250, width: 350, paddingTop: 5, paddingBottom: 5}} >
                             <Image source={{ uri: item.photo }} style={{marginHorizontal: "auto", height: 250, width: 350}} />
                         </View>
                   )} />
@@ -48,6 +48,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#fff',
         paddingHorizontal: 16,
+        paddingBottom: 130,
     },
     userContainer: {
         flexDirection: 'row',
@@ -80,9 +81,9 @@ const styles = StyleSheet.create({
         lineHeight: 13,
     },
     flatList: {
-        flex: 1,
         justifyContent: "center",
-        overflow: "scroll",
+        alignItems: "center",
+        overflowY: "scroll",
     },
 })
 
