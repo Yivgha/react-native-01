@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native'
 import { AntDesign } from '@expo/vector-icons'
-import { Feather } from '@expo/vector-icons'
+import { EvilIcons } from '@expo/vector-icons'
 import { FontAwesome } from '@expo/vector-icons'
 import { MaterialCommunityIcons } from '@expo/vector-icons'; 
 import React, { useState, useEffect, useRef } from 'react'
@@ -45,7 +45,7 @@ function CreatePostsScreen({ navigation }, props) {
     const sendPhoto = () => {
         if (photo !== "") {
         console.log("Posting");
-            navigation.navigate("Posts", { photo });
+            navigation.navigate("DefaultPostsScreen" , { photo });
             deletePhoto();
         }
     };
@@ -83,7 +83,7 @@ function CreatePostsScreen({ navigation }, props) {
             <View style={styles.uploadBox}>
                 {isFocused && <Camera style={styles.camera} type={type} ref={setCamera}>
                     <View style={styles.takePhotoContainer}>
-                        <Image source={{ uri: photo }} style={{ height: "100%", width: "100%" }} />
+                       {photo !== "" && (<Image source={{ uri: photo }} style={{ height: "100%", width: "100%" }} />)} 
                     </View>
                     <TouchableOpacity onPress={flipCamera} style={styles.flipBox}>
                         <MaterialCommunityIcons name="camera-flip-outline" size={30} color="#fff" />
@@ -94,9 +94,23 @@ function CreatePostsScreen({ navigation }, props) {
                 </Camera>}
                 <Text style={styles.mainText}>Upload photo</Text>
             </View>
-            <View>
+
+            <View style={styles.nameBox}>
+                <Text style={styles.mainText}>Name...</Text>
+            </View>
+
+            <View style={styles.locationBox}>
+                <EvilIcons
+                                        name="location"
+                                        size={20}
+                                        color="black"
+                                        />
+                <Text style={styles.mainText}>Location...</Text>
+            </View>
+
+             <View>
                 <TouchableOpacity style={styles.sendBtn} onPress={sendPhoto}>
-<Text style={{color: "#FFF"}}>Post photo</Text>
+<Text style={styles.sendBtnText}>Publish</Text>
                 </TouchableOpacity>
             </View>
             <View>
@@ -104,27 +118,7 @@ function CreatePostsScreen({ navigation }, props) {
             <AntDesign name="delete" size={20} color="#BDBDBD"/>
                 </TouchableOpacity>
             </View>
-            {/* 
-            <View style={styles.nameBox}>
-                <Text style={styles.mainText}>Name...</Text>
-            </View>
-
-            <View style={styles.locationBox}>
-                <Feather
-                    name="map-pin"
-                    size={24}
-                    color="#BDBDBD"
-                    style={{ marginRight: 4 }}
-                />
-                <Text style={styles.mainText}>Location...</Text>
-            </View>
-
-            <TouchableOpacity style={styles.btn}>
-                <Text style={styles.mainText}>Publish</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.deleteBtn}>
-                <AntDesign name="delete" size={24} color="#BDBDBD" />
-            </TouchableOpacity> */}
+          
         </View>
     )
 }
@@ -133,9 +127,8 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#fff',
         paddingHorizontal: 16,
-        paddingTop: 90,
+        paddingTop: 30,
         alignItems: 'center',
-        justifyContent: 'center',
     },
     mainText: {
         color: '#BDBDBD',
@@ -144,18 +137,7 @@ const styles = StyleSheet.create({
         lineHeight: 19,
         paddingLeft: 5,
     },
-    btn: {
-        borderRadius: 100,
-        backgroundColor: '#F6F6F6',
-        paddingTop: 16,
-        paddingBottom: 16,
-        paddingHorizontal: 'auto',
-        height: 50,
-        width: '100%',
-        alignItems: 'center',
-        marginTop: 32,
-        marginBottom: 120,
-    },
+  
     deleteBtn: {
         width: 70,
         height: 40,
@@ -170,7 +152,6 @@ const styles = StyleSheet.create({
         width: '100%',
         paddingHorizontal: 'auto',
         marginBottom: 16,
-        height: 350,
         position: "relative",
     },
     camera: {
@@ -215,20 +196,13 @@ const styles = StyleSheet.create({
         color: "#BDBDBD",
          alignItems: "center",
         justifyContent: "center",
-        marginBottom: 10,
+        marginBottom: 20,
         marginHorizontal: "auto",
     },
-    deleteBtn: {
-        width: 50,
-        height: 50,
-        borderWidth: 1,
-        borderColor: "#BDBDBD",
-        borderRadius: 50,
-        alignItems: "center",
-        justifyContent: "center",
+    sendBtnText: {
+        color: "#fff"
     },
     nameBox: {
-        flexDirection: 'row',
         borderBottomWidth: 1,
         borderBottomColor: '#E8E8E8',
         width: '100%',
@@ -245,6 +219,7 @@ const styles = StyleSheet.create({
         paddingTop: 16,
         paddingBottom: 16,
         paddingHorizontal: 'auto',
+         marginBottom: 16,
     },
 })
 export default CreatePostsScreen

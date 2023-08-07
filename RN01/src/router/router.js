@@ -1,8 +1,8 @@
 import { createStackNavigator } from '@react-navigation/stack'
 import React from 'react'
 
-import RegistrationForm from '../Screens/auth/RegistrationScreen/RegistrationScreen'
-import LoginForm from '../Screens/auth/LoginScreen/LoginScreen'
+import RegistrationForm from '../Screens/authScreens/RegistrationScreen/RegistrationScreen'
+import LoginForm from '../Screens/authScreens/LoginScreen/LoginScreen'
 import HomeScreen from '../Screens/Home/HomeScreen'
 
 const AuthStack = createStackNavigator()

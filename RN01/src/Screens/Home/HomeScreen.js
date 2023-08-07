@@ -3,9 +3,9 @@ import { Feather } from '@expo/vector-icons'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import React from 'react'
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
-import PostsScreen from './PostsScreen'
 import CreatePostsScreen from './CreatePostsScreen'
 import ProfileScreen from './ProfileScreen'
+import PostsScreen from './PostsScreen'
 
 const MainTab = createBottomTabNavigator()
 
