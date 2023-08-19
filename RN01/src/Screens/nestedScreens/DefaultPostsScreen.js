@@ -4,9 +4,7 @@ import {
     StyleSheet,
     Image,
     FlatList,
-    TouchableOpacity,
-    Button,
-    Alert,
+    TouchableOpacity
 } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { FontAwesome } from '@expo/vector-icons'
@@ -44,7 +42,7 @@ function DefaultPostsScreen({ route, navigation }) {
                     data={posts}
                     keyExtractor={(item, idx) => idx.toString()}
                     renderItem={({ item }) => (
-                        <View style={{ height: 300, width: 350 }}>
+                        <View style={{ height: 350, width: 350, paddingHorizontal: "auto", paddingVertical: "auto" }}>
                             <Image
                                 source={{ uri: item.photo }}
                                 style={{
@@ -53,13 +51,14 @@ function DefaultPostsScreen({ route, navigation }) {
                                     width: 350,
                                 }}
                             />
+                            <Text style={styles.photoName}>{item.name}</Text>
                             <View style={styles.postIcons}>
                                 <TouchableOpacity
                                     onPress={() =>
                                         navigation.navigate('Comments')
                                     }
                                 >
-                                   <View>
+                                   <View  style={{display: "flex", flexDirection:"row", margin: 0}}>
                                     <FontAwesome
                                         name="comments"
                                         size={30}
@@ -72,12 +71,13 @@ function DefaultPostsScreen({ route, navigation }) {
                                         navigation.navigate('MapScreen')
                                     }
                                 >
-                                   <View>
+                                   <View style={{display: "flex", flexDirection:"row",  margin: 0}}>
                                     <EvilIcons
                                         name="location"
                                         size={30}
                                         color="black"
                                         />
+                                        <Text >{ item.location }</Text>
                                       </View>
                                     </TouchableOpacity>
                             </View>
@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#fff',
         paddingHorizontal: 16,
-        paddingBottom: 190,
+        paddingBottom: 250,
     },
     userContainer: {
         flexDirection: 'row',
@@ -132,6 +132,7 @@ const styles = StyleSheet.create({
         overflowY: 'scroll',
         height: 500,
         width: '100%',
+        paddingVertical: 5,
     },
     postIcons: {
         marginTop: 5,
@@ -140,8 +141,12 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-evenly',
         alignItems: "center",
-        paddingHorizontal: "auto"
     },
+    photoName: {
+        color: "#000",
+        marginTop: 5,
+        marginBottom: 0,
+    }
 })
 
 export default DefaultPostsScreen

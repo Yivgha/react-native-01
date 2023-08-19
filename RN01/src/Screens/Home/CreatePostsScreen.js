@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, Image, TouchableOpacity, TextInput } from 'react-native'
 import { AntDesign } from '@expo/vector-icons'
 import { EvilIcons } from '@expo/vector-icons'
 import { FontAwesome } from '@expo/vector-icons'
@@ -17,18 +17,22 @@ function CreatePostsScreen({ navigation }, props) {
     const [hasPermission, setHasPermission] = useState(null);
     const [type, setType] = useState(CameraType.back);
 
-    const [location, setLocation] = useState(null);
-    
+    const [location, setLocation] = useState("Set location");
+    const [name, setName] = useState("");
+
     const takePhoto = async () => {
         if (photo === "") {
             const photo = await camera.takePictureAsync();
             const location = await Location.getCurrentPositionAsync();
         // console.log("Snap taken", photo.uri);
             console.log("location", location);
-        setPhoto(photo.uri);
+            setPhoto(photo.uri);
+            setLocation([location.coords.latitude, location.coords.longitude]);
         await MediaLibrary.createAssetAsync(photo.uri);
         } else {
             setPhoto("");
+            setName("");
+            setLocation("");
         }
         
     };
@@ -45,7 +49,7 @@ function CreatePostsScreen({ navigation }, props) {
     const sendPhoto = () => {
         if (photo !== "") {
         console.log("Posting");
-            navigation.navigate("DefaultPostsScreen" , { photo });
+            navigation.navigate("DefaultPostsScreen", { photo, name, location });
             deletePhoto();
         }
     };
@@ -54,6 +58,8 @@ function CreatePostsScreen({ navigation }, props) {
         if (photo !== "") {
             console.log("Deleted");
             setPhoto("");
+            setName("");
+            setLocation("");
         } else {
             console.log("Nothing to delete");
         }
@@ -92,11 +98,11 @@ function CreatePostsScreen({ navigation }, props) {
                         <FontAwesome name="camera" size={24} color="#BDBDBD" />
                     </TouchableOpacity>
                 </Camera>}
-                <Text style={styles.mainText}>Upload photo</Text>
+                <Text style={styles.mainText}>Touch icon to make a photo</Text>
             </View>
 
             <View style={styles.nameBox}>
-                <Text style={styles.mainText}>Name...</Text>
+                <TextInput style={styles.mainText} value={name} placeholder='Set name' onChangeText={text => setName(text)} />
             </View>
 
             <View style={styles.locationBox}>
@@ -105,7 +111,7 @@ function CreatePostsScreen({ navigation }, props) {
                                         size={20}
                                         color="black"
                                         />
-                <Text style={styles.mainText}>Location...</Text>
+                <TextInput style={styles.mainText} value={location} onChange={newLoc => setLocation(newLoc)} placeholder={location.toString()} />
             </View>
 
              <View>
@@ -127,7 +133,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#fff',
         paddingHorizontal: 16,
-        paddingTop: 30,
+        paddingTop: 10,
         alignItems: 'center',
     },
     mainText: {
@@ -151,13 +157,13 @@ const styles = StyleSheet.create({
     uploadBox: {
         width: '100%',
         paddingHorizontal: 'auto',
-        marginBottom: 16,
+        marginBottom: 15,
         position: "relative",
     },
     camera: {
         height: 250,
         alignItems: 'center',
-        marginBottom: 10,
+        marginBottom: 5,
         borderRadius: 10,
     },
     snap: { color: '#fff' },
@@ -196,7 +202,7 @@ const styles = StyleSheet.create({
         color: "#BDBDBD",
          alignItems: "center",
         justifyContent: "center",
-        marginBottom: 20,
+        marginBottom: 15,
         marginHorizontal: "auto",
     },
     sendBtnText: {
@@ -206,20 +212,21 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         borderBottomColor: '#E8E8E8',
         width: '100%',
-        paddingTop: 16,
-        paddingBottom: 16,
+        paddingTop: 10,
+        paddingBottom: 10,
         paddingHorizontal: 'auto',
-        marginBottom: 16,
+        marginBottom: 10,
     },
     locationBox: {
         flexDirection: 'row',
+       alignItems: "center",
         borderBottomWidth: 1,
         borderBottomColor: '#E8E8E8',
         width: '100%',
-        paddingTop: 16,
-        paddingBottom: 16,
+        paddingTop: 10,
+        paddingBottom: 10,
         paddingHorizontal: 'auto',
-         marginBottom: 16,
+         marginBottom: 10,
     },
 })
 export default CreatePostsScreen
