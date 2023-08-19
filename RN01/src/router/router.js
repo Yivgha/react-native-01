@@ -1,6 +1,4 @@
 import { createStackNavigator } from '@react-navigation/stack'
-import React from 'react'
-
 import RegistrationForm from '../Screens/authScreens/RegistrationScreen/RegistrationScreen'
 import LoginForm from '../Screens/authScreens/LoginScreen/LoginScreen'
 import HomeScreen from '../Screens/Home/HomeScreen'
@@ -8,10 +6,10 @@ import HomeScreen from '../Screens/Home/HomeScreen'
 const AuthStack = createStackNavigator()
 
 const useRoute = (isAuth) => {
-    if (!isAuth) {
-        return (
-            <AuthStack.Navigator initialRouteName="Register">
-                <AuthStack.Screen
+
+    return (
+        <AuthStack.Navigator initialRouteName="Register">
+            {!isAuth && (<><AuthStack.Screen
                     options={{ headerShown: false }}
                     name="Register"
                     component={RegistrationForm}
@@ -21,19 +19,33 @@ const useRoute = (isAuth) => {
                     name="Login"
                     component={LoginForm}
                 />
-            </AuthStack.Navigator>
-        )
-    } else {
-        return (
-            <AuthStack.Navigator>
+            </>)}
+            {isAuth && (<><AuthStack.Screen
+                options={{ headerShown: false }}
+                name="Home"
+                component={HomeScreen}
+            /></>)}
+            {/* {isAuth ?
+                (<><AuthStack.Screen
+                options={{ headerShown: false }}
+                name="Home"
+                component={HomeScreen}
+            /></>) :
+                (<><AuthStack.Screen
+                    options={{ headerShown: false }}
+                    name="Register"
+                    component={RegistrationForm}
+                />
                 <AuthStack.Screen
                     options={{ headerShown: false }}
-                    name="Home"
-                    component={HomeScreen}
-                />
-            </AuthStack.Navigator>
-        )
-    }
+                    name="Login"
+                    component={LoginForm}
+                /></>)} */}
+                
+                
+        </AuthStack.Navigator>
+    );
+  
 }
 
 export default useRoute

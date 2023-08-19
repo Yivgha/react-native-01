@@ -9,7 +9,10 @@ import PostsScreen from './PostsScreen'
 
 const MainTab = createBottomTabNavigator()
 
-function HomeScreen(isAuth, {navigation}) {
+function HomeScreen({ navigation}) {
+    const logout = () => {   
+        console.log("Pressed log out");
+    }
     return (
         <MainTab.Navigator
             initialRouteName="Posts"
@@ -66,7 +69,7 @@ function HomeScreen(isAuth, {navigation}) {
                     },
                     headerRight: () => (
                         <TouchableOpacity
-                            onPress={() => { console.log("Pressed log out"); }}
+                            onPress={() => logout()}
                         >
                             <Feather
                                 name="log-out"
@@ -124,7 +127,9 @@ function HomeScreen(isAuth, {navigation}) {
             />
         </MainTab.Navigator>
     )
-}
+    }
+
+
 
 const styles = StyleSheet.create({
     iconContainer: {
