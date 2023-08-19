@@ -100,8 +100,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         width: 170,
         height: 60,
-        marginTop: 32,
-        marginBottom: 32,
+        marginTop: 12,
+        marginBottom: 12,
     },
     avatar: {
         width: 60,
