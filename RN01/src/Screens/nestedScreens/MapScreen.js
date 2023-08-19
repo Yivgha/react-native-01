@@ -10,7 +10,7 @@ function MapScreen() {
     
     useEffect(() => {
     (async () => {
-      let { status } = await Location.requestPermissionsAsync();
+      let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== "granted") {
         console.log("Permission to access location was denied");
       }
@@ -38,7 +38,7 @@ function MapScreen() {
                 showsUserLocation={true}
             >
                 {location && (
-          <Marker title="I am here" coordinate={location} description="Your current position" />
+          <Marker title="Title" coordinate={location} description="Description" />
         )}
         </MapView>
         </View>

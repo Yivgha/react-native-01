@@ -108,8 +108,8 @@ function CreatePostsScreen({ navigation }, props) {
             <View style={styles.locationBox}>
                 <EvilIcons
                                         name="location"
-                                        size={20}
-                                        color="black"
+                                        size={30}
+                                        color="gray"
                                         />
                 <TextInput style={styles.mainText} value={location} onChange={newLoc => setLocation(newLoc)} placeholder={location.toString()} />
             </View>
