@@ -16,6 +16,8 @@ import PasswordInput from '../../../components/common/Input'
 import AvatarInput from '../../../components/common/Avatar'
 import CustomInput from '../../../components/common/CustomTextInput'
 import { useKeyboardStatus } from '../../../hooks/isOpen'
+import { useDispatch } from 'react-redux'
+import {authSignUpUser} from "../../../redux/auth/authOperations"
 
 const units = {
     width: Dimensions.get('window').width,
@@ -23,11 +25,13 @@ const units = {
 }
 
 const initialState = {
-    login: '',
+    nickname: '',
     email: '',
     password: '',
 }
 const bgImg = require('../../../../assets/images/bg-img-1x.jpg')
+
+
 
 export default function RegistrationForm({ navigation }) {
     const [isShowKeyboard, setIsShowKeyboard] = useState(false)
@@ -35,12 +39,16 @@ export default function RegistrationForm({ navigation }) {
     const [isSecureEntry, setIsSecureEntry] = useState(true)
     const [state, setState] = useState(initialState)
 
+    const dispatch = useDispatch();
+
     const submitForm = () => {
         setIsShowKeyboard(true)
         Keyboard.dismiss()
-        console.log(JSON.stringify(state))
+        console.log("state:", JSON.stringify(state))
+
+        dispatch(authSignUpUser(state))
+        // navigation.navigate('Home')
         setState(initialState)
-        navigation.navigate('Home')
     }
 
     const keyboardHide = () => {
@@ -72,13 +80,13 @@ export default function RegistrationForm({ navigation }) {
                             />
                             <Text style={styles.title}>Registration</Text>
                             <CustomInput
-                                value={state.login}
-                                placeholder="Login"
+                                value={state.nickname}
+                                placeholder="Nickname"
                                 placeholderTextColor={'#BDBDBD'}
                                 onChangeText={(value) => {
                                     setState((prevState) => ({
                                         ...prevState,
-                                        login: value,
+                                        nickname: value,
                                     }))
                                 }}
                             />
