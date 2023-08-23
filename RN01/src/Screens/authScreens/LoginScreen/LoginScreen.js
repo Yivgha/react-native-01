@@ -16,6 +16,9 @@ import PasswordInput from '../../../components/common/Input'
 import CustomInput from '../../../components/common/CustomTextInput'
 import { useKeyboardStatus } from '../../../hooks/isOpen'
 
+import { useDispatch } from 'react-redux'
+import {authLogInUser} from "../../../redux/auth/authOperations"
+
 const units = {
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').height,
@@ -32,11 +35,13 @@ export default function LoginForm({ navigation }) {
     const isOpen = useKeyboardStatus(true)
     const [isSecureEntry, setIsSecureEntry] = useState(true)
     const [state, setState] = useState(initialState)
+    const dispatch = useDispatch();
 
     const submitForm = () => {
         setIsShowKeyboard(true)
         Keyboard.dismiss()
-        console.log(JSON.stringify(state))
+        console.log("logged", JSON.stringify(state))
+        dispatch(authLogInUser(state))
         setState(initialState)
         // navigation.navigate('Home')
     }
