@@ -1,4 +1,5 @@
-import React, {useCallback} from 'react'
+import 'react-native-gesture-handler'
+import React, { useCallback } from 'react'
 import { useFonts } from 'expo-font'
 import * as SplashScreen from 'expo-splash-screen'
 import { LogBox } from 'react-native'

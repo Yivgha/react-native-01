@@ -1,30 +1,25 @@
-import 'react-native-gesture-handler'
-import React, { useEffect, useState} from "react";
+import React, { useEffect} from "react";
 import { } from "react-native";
 import {useSelector, useDispatch} from "react-redux";
 import useRoute from '../router/router'
 import { NavigationContainer } from '@react-navigation/native'
-import "firebase/compat/auth"
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import {authChangeUser} from "../redux/auth/authOperations"
 
-const Main = () => {
-    const [userOn, setUserOn] = useState(null);
+const Main = () => {   
+    const {stateChange} = useSelector((state) => state.auth);
+    const dispatch = useDispatch();
 
+    useEffect(() => {
+        dispatch(authChangeUser())
+    }, []);
 
-    const routing = useRoute(userOn);
-
-     const authFirebase = getAuth()
-    authFirebase.onAuthStateChanged((user) => { console.log("user displayName:", user.displayName); setUserOn(user) });
-
+    const routing = useRoute(stateChange);
     
-    const state = useSelector((state)=>state)
-    // useEffect(()=>{}, [])
-    
-  return (
-     <NavigationContainer >
+    return (
+        <NavigationContainer >
             {routing}
-    </NavigationContainer>
-  )
+        </NavigationContainer>
+    );
 }
 
 export default Main;

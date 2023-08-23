@@ -33,7 +33,9 @@ function DefaultPostsScreen({ route, navigation }) {
                     />
                 </View>
                 <View style={styles.credentials}>
-                    <Text style={styles.userName}>Natali Romanova</Text>
+                    <Text style={styles.userName}>
+                        Natali Romanova
+                    </Text>
                     <Text style={styles.userMail}>email@example.com</Text>
                 </View>
             </View>
