@@ -1,5 +1,3 @@
-import db from "../../firebase/firebaseConfig"
-import "firebase/compat/auth"
 import { getAuth, updateProfile, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { authSlice} from "./authReducer";
  
@@ -21,17 +19,16 @@ const authSignUpUser = ({ email, password, nickname }) => async (dispatch, getSt
 const authLogInUser = ({ email, password }) => async (dispatch, getState) => { 
      try {
         const authFirebase = getAuth()
-         const user = await signInWithEmailAndPassword(authFirebase, email, password).then(userCred => {
-             const thisCred = userCred.user;
-         });
-        
+         await signInWithEmailAndPassword(authFirebase, email, password);
+
      } catch (error) {
         console.log("error", error.code, error.message);
      }
 } 
 const authLogOutUser = () => async (dispatch, getState) => { 
     const authFirebase = getAuth();
-    await signOut(authFirebase).then(() => { console.log("Signed out"); }).catch((error) => { console.log("error", error.code, error.message); });
+    await signOut(authFirebase).then(() => { console.log("Signed out"); })
+        .catch((error) => { console.log("error", error.code, error.message); });
     dispatch(authSlice.actions.authLogOut());
 } 
 
