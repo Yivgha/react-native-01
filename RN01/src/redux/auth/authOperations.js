@@ -31,6 +31,9 @@ const authLogInUser = ({ email, password }) => async (dispatch, getState) => {
 } 
 const authLogOutUser = () => async (dispatch, getState) => { } 
 
-const authChangeUser = () => async(dispatch, getState)=>{}
+const authChangeUser = () => async (dispatch, getState) => { 
+    const authFirebase = getAuth();
+   authFirebase.onAuthStateChanged((user) => {})
+}
 
 export {authSignUpUser, authLogInUser, authLogOutUser, authChangeUser}
