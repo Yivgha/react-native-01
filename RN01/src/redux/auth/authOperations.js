@@ -1,14 +1,18 @@
-import firebase from "../../firebase/firebaseConfig"
+import db from "../../firebase/firebaseConfig"
 import "firebase/compat/auth"
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import { getAuth, updateProfile, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import { authSlice} from "./authReducer";
  
 const authSignUpUser = ({ email, password, nickname }) => async (dispatch, getState) => {
     try {
         const authFirebase = getAuth()
-        const user = await createUserWithEmailAndPassword(authFirebase, email, password).then(userCred => {
-            const thisCred = userCred.user;
-        });
-        // console.log("user", user);
+        await createUserWithEmailAndPassword(authFirebase, email, password);
+        
+        const user = authFirebase.currentUser;
+         updateProfile(authFirebase.currentUser, {displayName: nickname})
+
+        dispatch(authSlice.actions.updateUserProfile({userId: user.uid, nickname: user.displayName}))
+        
     } catch (error) {
         console.log("error", error.code, error.message);
     }
@@ -27,4 +31,6 @@ const authLogInUser = ({ email, password }) => async (dispatch, getState) => {
 } 
 const authLogOutUser = () => async (dispatch, getState) => { } 
 
-export {authSignUpUser, authLogInUser, authLogOutUser}
+const authChangeUser = () => async(dispatch, getState)=>{}
+
+export {authSignUpUser, authLogInUser, authLogOutUser, authChangeUser}

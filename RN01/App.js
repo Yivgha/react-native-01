@@ -37,7 +37,7 @@ export default function App() {
     }
 
  const authFirebase = getAuth()
-    authFirebase.onAuthStateChanged((user) => { console.log("got user"); setUserOn(user) })
+    authFirebase.onAuthStateChanged((user) => { console.log("got user", "displayName:", user.displayName); setUserOn(user) })
        
 
 
