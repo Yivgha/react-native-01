@@ -25,27 +25,8 @@ const useRoute = (isAuth) => {
                 name="Home"
                 component={HomeScreen}
             /></>)}
-            {/* {isAuth ?
-                (<><AuthStack.Screen
-                options={{ headerShown: false }}
-                name="Home"
-                component={HomeScreen}
-            /></>) :
-                (<><AuthStack.Screen
-                    options={{ headerShown: false }}
-                    name="Register"
-                    component={RegistrationForm}
-                />
-                <AuthStack.Screen
-                    options={{ headerShown: false }}
-                    name="Login"
-                    component={LoginForm}
-                /></>)} */}
-                
-                
         </AuthStack.Navigator>
     );
-  
 }
 
 export default useRoute
