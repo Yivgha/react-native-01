@@ -6,13 +6,18 @@ import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import CreatePostsScreen from './CreatePostsScreen'
 import ProfileScreen from './ProfileScreen'
 import PostsScreen from './PostsScreen'
+import { authLogOutUser } from "../../redux/auth/authOperations";
+import {useDispatch } from 'react-redux';
 
 const MainTab = createBottomTabNavigator()
 
-function HomeScreen({ navigation}) {
-    const logout = () => {   
-        console.log("Pressed log out");
-    }
+function HomeScreen({ navigation }) {
+    const dispatch = useDispatch();
+
+    const logout = () => {
+        dispatch(authLogOutUser())
+    };
+    
     return (
         <MainTab.Navigator
             initialRouteName="Posts"
