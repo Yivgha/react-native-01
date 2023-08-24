@@ -4,6 +4,7 @@ import {
     StyleSheet,
     Text,
     TextInput,
+    Image,
     TouchableOpacity,
     FlatList,
     SafeAreaView,
@@ -15,11 +16,12 @@ import {
     collection,
     getFirestore,
     addDoc,
+    getDoc,
     onSnapshot,
 } from 'firebase/firestore'
 
 function CommentsScreen({ route }) {
-    const { postId } = route.params
+    const { postId, photo, name } = route.params;
     const [comment, setComment] = useState('')
     const [allComm, setAllComm] = useState([])
 
@@ -31,12 +33,15 @@ function CommentsScreen({ route }) {
         console.log('Sending comment', comment)
         createComment()
         setComment('')
-    }
+    };
 
     const createComment = async () => {
+        const date = new Date();
+        const commentDate = date.toUTCString();
+        
         const createCommentRef = await addDoc(
             collection(myDB, `posts/${postId}/comments`),
-            { comment, nickname }
+            { comment, nickname,  commentDate }
         )
         return createCommentRef
     }
@@ -49,6 +54,7 @@ function CommentsScreen({ route }) {
                     return {
                         ...doc.data(),
                         id: doc.id,
+                        date:doc.commentDate
                     }
                 })
                 setAllComm(documents)
@@ -58,33 +64,37 @@ function CommentsScreen({ route }) {
     }
 
     useEffect(() => {
-        getAllComments()
+        getAllComments();
     }, [])
 
     return (
         <View style={styles.wrapper}>
             <View style={styles.pictureInComm}>
-                <Text>Photo here</Text>
+                <Image source={{uri: `${photo}`}} alt={`${name}`} style={{width: 340, height: 240, borderRadius: 10}} />
             </View>
 
-            <View style={styles.commBlock}>
-                <SafeAreaView>
+
+                <SafeAreaView style={styles.commBlock}>
                     <FlatList
                         data={allComm}
                         keyExtractor={(item) => item.id}
                         renderItem={({ item }) => (
                             <View style={styles.oneComment}>
-                                <Text style={styles.commNick}>
+                                <View>
+                            <Text style={styles.commNick}>
                                     {item.nickname}
                                 </Text>
-                                <Text style={styles.commText}>
+                                </View>
+                                <View style={styles.commText}>
+                                <Text style={{color: "#212121", fontSize: 18, marginBottom: 8}} >
                                     {item.comment}
                                 </Text>
+                                    <Text style={{color: "gray", fontSize: 13}}>{item.commentDate }</Text>
+                                    </View>
                             </View>
                         )}
                     />
                 </SafeAreaView>
-            </View>
 
             <View style={styles.commentInputBox}>
                 <TextInput
@@ -112,19 +122,18 @@ const styles = StyleSheet.create({
     },
     pictureInComm: {
         width: 340,
-        height: 200,
+        height: 240,
         marginTop: 0,
         marginBottom: 10,
-        borderColor: 'black',
-        borderWidth: 1,
     },
     commBlock: {
         width: 340,
-        height: 180,
-        marginBottom: 10,
-        borderColor: 'black',
-        borderWidth: 1,
+        height: 200,
+        marginBottom: 20,
         paddingTop: 10,
+        paddingBottom: 5,
+        borderRadius: 10,
+        border: 'transparent',
     },
     commentInputBox: {
         width: 340,
@@ -148,33 +157,39 @@ const styles = StyleSheet.create({
     },
     oneComment: {
         overflowY: 'scroll',
-        borderWidth: 1,
-        marginBottom: 10,
-        paddingHorizontal: 10,
-        paddingVertical: 3,
+        paddingLeft: 10,
+        paddingRight: 5,
+        marginBottom: -15,
         display: 'flex',
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        justifyContent: 'center',
+        alignItems: "baseline",
         width: 340,
-        height: 100,
+        height: 110,
     },
     commNick: {
         width: 40,
         height: 40,
-        borderRadius: 50,
-        border: 'transparent',
+        marginRight: 10,
+        borderRadius: 30,
+        // border: 'transparent',
         outline: 'none',
+        alignItems: "center",
+        justifyContent: "center",
+        borderWidth: 1,
+        borderColor: "red"
     },
     commText: {
-        borderRadius: 20,
-        borderWidth: 1,
+       border: "transparent",
+        borderTopRightRadius: 10,
+        borderBottomRightRadius: 10,
         width: 270,
-        height: 90,
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        textAlign: 'center',
+        minHeight: 70,
         paddingTop: 10,
+        paddingBottom: 5,
+        paddingLeft: 10,
+        textAlign: 'center',
+        backgroundColor: "#BDBDBD"
     },
     sendCommBtn: {
         backgroundColor: '#FF6C00',
@@ -182,6 +197,7 @@ const styles = StyleSheet.create({
         width: 34,
         height: 34,
         borderRadius: 50,
+        border: "transparent",
         outline: 'none',
         display: 'flex',
         alignItems: 'center',

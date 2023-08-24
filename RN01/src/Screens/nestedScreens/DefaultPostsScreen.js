@@ -80,6 +80,8 @@ function DefaultPostsScreen({ navigation }) {
                                         onPress={() =>
                                             navigation.navigate('Comments', {
                                                 postId: item.id,
+                                                photo: item.photo,
+                                                name: item.name,
                                             })
                                         }
                                     >
