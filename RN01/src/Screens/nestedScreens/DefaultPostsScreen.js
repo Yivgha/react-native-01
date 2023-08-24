@@ -74,7 +74,7 @@ function DefaultPostsScreen({navigation }) {
                             <View style={styles.postIcons}>
                                 <TouchableOpacity
                                     onPress={() =>
-                                        navigation.navigate('Comments')
+                                        navigation.navigate('Comments', {postId: item.id})
                                     }
                                 >
                                    <View  style={{display: "flex", flexDirection:"row", margin: 0}}>

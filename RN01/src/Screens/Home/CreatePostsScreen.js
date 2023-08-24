@@ -72,9 +72,7 @@ function CreatePostsScreen({ navigation }, props) {
         
         await uploadBytes(storageRef, file).then((snapshot) => {console.log('Upload success');});       
 
-
         const processedPhoto = await getDownloadURL(storageRef);
-
         return processedPhoto;
     };
 
