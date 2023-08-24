@@ -10,7 +10,7 @@ import PostsScreen from './PostsScreen'
 const MainTab = createBottomTabNavigator()
 
 function HomeScreen({ navigation }) {
-
+    
     return (
         <MainTab.Navigator
             initialRouteName="Posts"

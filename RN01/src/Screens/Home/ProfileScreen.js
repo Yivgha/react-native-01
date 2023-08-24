@@ -41,18 +41,18 @@ function ProfileScreen({ navigation }) {
     }
 
     const getUserPosts = async () => {
-        const q = await query(
+        const q = query(
             collection(myDB, 'posts'),
             where('userId', '==', userId)
         )
         const querySnapshot = await getDocs(q)
-        const documents = await querySnapshot.docs.map((doc) => {
+        const documents = querySnapshot.docs.map((doc) => {
             return {
                 ...doc.data(),
                 id: doc.id,
             }
         })
-        setProfilePosts(documents);
+        setProfilePosts(documents)
     }
 
     useEffect(() => {
@@ -64,11 +64,7 @@ function ProfileScreen({ navigation }) {
                 <View style={styles.container}>
                     <View style={styles.topBox}>
                         <AvatarInput />
-                        <TouchableOpacity
-                            onPress={() => {
-                                logout();
-                            }}
-                        >
+                        <TouchableOpacity onPress={logout}>
                             <Feather
                                 name="log-out"
                                 size={24}
@@ -80,15 +76,14 @@ function ProfileScreen({ navigation }) {
                             />
                         </TouchableOpacity>
                     </View>
-                    <Text style={styles.title}>{user.displayName}</Text>
+                    <Text style={styles.title}>{user?.displayName}</Text>
 
-                    
-                        <SafeAreaView style={styles.postContainer}>
+                    <SafeAreaView style={styles.postContainer}>
                         <FlatList
                             data={profilePosts}
                             keyExtractor={(item) => item.id}
                             renderItem={({ item }) => (
-                                <View>
+                                <View style={styles.onePost}>
                                     <Image
                                         source={{ uri: item.photo }}
                                         alt={`${item.name}`}
@@ -97,62 +92,55 @@ function ProfileScreen({ navigation }) {
                                     <Text style={styles.postTitle}>
                                         {item.name}
                                     </Text>
-                                    <View tyle={styles.postDetails}>
-                                        <View style={styles.postIconsLeft}>
-                                            <TouchableOpacity
-                                                style={styles.postIcons}
+
+                                    <View style={styles.postSocials}>
+                                        <View style={{display: "flex", flexDirection: "row"}}>
+                                        <TouchableOpacity
+                                                style={styles.socialBtn}
                                                 onPress={() =>
-                                                    navigation.navigate(
-                                                        'Comments',
-                                                        { postId: item.id }
-                                                    )
-                                                }
-                                            >
-                                                <FontAwesome
-                                                    name="commenting-o"
-                                                    size={24}
-                                                    color="#FF6C00"
-                                                    style={{
-                                                        transform: [
-                                                            {
-                                                                rotateY:
-                                                                    '180deg',
-                                                            },
-                                                        ],
-                                                    }}
-                                                />
-                                                <Text style={styles.iconText}>
-                                                    8
-                                                </Text>
-                                            </TouchableOpacity>
-                                            <TouchableOpacity
-                                                style={styles.postIcons}
-                                            >
+                                        navigation.navigate('Comments', {postId: item.id})
+                                    }
+                                        >
+                                            <FontAwesome
+                                                name="comments"
+                                                size={24}
+                                                color="#FF6C00"
+                                                style={{ marginRight: 3 }}
+                                            />
+                                            <Text>1</Text>
+                                        </TouchableOpacity>
+                                        <TouchableOpacity style={styles.socialBtn}>
+                                            
                                                 <Feather
                                                     name="thumbs-up"
                                                     size={24}
                                                     color="#FF6C00"
+                                                    style={{ marginRight: 3 }}
                                                 />
-                                                <Text style={styles.iconText}>
-                                                    8
-                                                </Text>
+                                                <Text>1</Text>
                                             </TouchableOpacity>
-                                        </View>
-                                        <View style={styles.postIconsRight}>
+                                            </View>
+                                        <TouchableOpacity
+                                            style={styles.socialBtn}
+                                            onPress={() =>
+                                        navigation.navigate('MapScreen', {locationCoords: item.locationCoords, locationName: item.locationName})
+                                    }
+                                        >
                                             <Feather
                                                 name="map-pin"
                                                 size={24}
                                                 color="#BDBDBD"
+                                                style={{ marginRight: 3 }}
                                             />
                                             <Text style={styles.locationText}>
                                                 {item.locationName}
                                             </Text>
-                                        </View>
+                                        </TouchableOpacity>
                                     </View>
                                 </View>
                             )}
-                            />
-                            </SafeAreaView>
+                        />
+                    </SafeAreaView>
                 </View>
             </ImageBackground>
         </View>
@@ -178,6 +166,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'flex-end',
         alignItems: 'center',
+        marginRight: 10,
     },
     title: {
         fontFamily: 'Roboto-Bold',
@@ -187,56 +176,45 @@ const styles = StyleSheet.create({
         lineHeight: 35,
         letterSpacing: 0.01,
         marginTop: -30,
-        marginBottom: 32,
+        marginBottom: 20,
     },
     postContainer: {
-        padding: 5,
-        width: 350,
-        height: 300,
-        borderWidth: 1,
-        borderColor: 'black',
+        width: 380,
+        height: 350,
+        paddingBottomg: 10,
+    },
+    onePost: {
+        marginBottom: 20,
+        paddingBottom: 5,
     },
     postImage: {
-        width: 350,
+        width: 380,
         height: 240,
-        marginBottom: 8,
+        marginBottom: 15,
         borderRadius: 8,
-        borderWidth: 1,
-        borderColor: 'black',
     },
     postTitle: {
         color: '#212121',
         fontFamily: 'Roboto-Bold',
         fontSize: 16,
         lineHeight: 19,
-        marginBottom: 8,
+        marginBottom: 10,
+        textTransform: 'uppercase',
+        paddingHorizontal: 10,
     },
-    postDetails: {
-        color: '#212121',
-        display: 'flex',
-        fontFamily: 'Roboto-Regular',
-        fontSize: 16,
-        lineHeight: 19,
-        flexDirection: 'row',
-        justifyContent: 'space-evenly',
-        alignItems: 'center',
-    },
-    postIconsLeft: {
+    postSocials: {
         display: 'flex',
         flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        paddingHorizontal: 10,
     },
-    postIconsRight: {
+    socialBtn: {
         display: 'flex',
         flexDirection: 'row',
+        justifyContent: 'center',
         alignItems: 'center',
-    },
-    postIcons: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginRight: 24,
-    },
-    iconText: {
-        marginLeft: 8,
+        marginRight: 10,
     },
     locationText: {
         textDecorationLine: 'underline',
@@ -245,6 +223,7 @@ const styles = StyleSheet.create({
         fontFamily: 'Roboto-Regular',
         fontSize: 16,
         lineHeight: 19,
+        textTransform: 'uppercase',
     },
 })
 export default ProfileScreen

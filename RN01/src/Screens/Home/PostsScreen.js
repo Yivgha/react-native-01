@@ -2,6 +2,9 @@ import React from 'react'
 import { TouchableOpacity } from 'react-native'
 import { Feather } from '@expo/vector-icons'
 import { createStackNavigator } from '@react-navigation/stack'
+import { useDispatch } from 'react-redux'
+import { authLogOutUser } from '../../redux/auth/authOperations'
+import db from '../../firebase/firebaseConfig'
 import CommentsScreen from '../nestedScreens/CommentsScreen'
 import MapScreen from '../nestedScreens/MapScreen'
 import DefaultPostsScreen from '../nestedScreens/DefaultPostsScreen'
@@ -9,6 +12,10 @@ import DefaultPostsScreen from '../nestedScreens/DefaultPostsScreen'
 const NestedScreen = createStackNavigator()
 
 const PostsScreen = () => {
+     const dispatch = useDispatch()
+    const logout = () => {
+        dispatch(authLogOutUser())
+    }
     return (
         <NestedScreen.Navigator>
             <NestedScreen.Screen
