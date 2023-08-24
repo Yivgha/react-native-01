@@ -3,19 +3,27 @@ import { FontAwesome } from '@expo/vector-icons'
 import { View, Text, StyleSheet, ImageBackground, Image } from 'react-native'
 import React, { useState } from 'react'
 import AvatarInput from '../../components/common/Avatar'
-import { TouchableOpacity } from 'react-native-gesture-handler'
-const bgImg = require('../../../assets/images/bg-img-1x.jpg')
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { authLogOutUser } from "../../redux/auth/authOperations";
+import {useDispatch } from 'react-redux';
+
+const bgImg = require('../../../assets/images/bg-img-1x.jpg');
 
 function ProfileScreen(isAuth) {
     const [posts, setPosts] = useState([]);
 
+const dispatch = useDispatch();
+
+    const logout = () => {
+        dispatch(authLogOutUser())
+    };
     return (
         <View style={styles.wrapper}>
             <ImageBackground source={bgImg} style={styles.image}>
                 <View style={styles.container}>
                     <View style={styles.topBox}>
                         <AvatarInput />
-                        <TouchableOpacity onPress={()=>{console.log("Touched log out on Profile");}}
+                        <TouchableOpacity onPress={()=>{console.log("Touched log out on Profile"); logout()}}
                         >
                             <Feather
                                 name="log-out"

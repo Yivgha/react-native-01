@@ -1,12 +1,13 @@
-import React, {useState, useEffect} from 'react'
-import { View, Text, StyleSheet, Dimensions } from 'react-native'
+import React, {useEffect} from 'react'
+import { View, StyleSheet, Dimensions } from 'react-native'
 import MapView, { Marker } from "react-native-maps";
 import * as Location from "expo-location";
 
 
-function MapScreen() {
+function MapScreen({route}) {
 
-    const [location, setLocation] = useState(null);
+  const { latitude, longitude } = route.params.locationCoords;
+  const { locationName } = route.params;
     
     useEffect(() => {
     (async () => {
@@ -15,12 +16,7 @@ function MapScreen() {
         console.log("Permission to access location was denied");
       }
 
-      let location = await Location.getCurrentPositionAsync({});
-      const coords = {
-        latitude: location.coords.latitude,
-        longitude: location.coords.longitude,
-      };
-      setLocation(coords);
+      await Location.getCurrentPositionAsync({});
     })();
   }, []);
 
@@ -28,7 +24,8 @@ function MapScreen() {
         <View style={styles.wrapper}>
             <MapView style={styles.mapStyle}
         region={{
-          ...location,
+          latitude,
+          longitude,
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421,
                 }}
@@ -37,8 +34,8 @@ function MapScreen() {
         onMapReady={() => console.log("Map is ready")}
                 showsUserLocation={true}
             >
-                {location && (
-          <Marker title="Title" coordinate={location} description="Description" />
+                {latitude && longitude && (
+          <Marker title={`${locationName}`} coordinate={{latitude, longitude}} />
         )}
         </MapView>
         </View>

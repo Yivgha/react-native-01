@@ -4,24 +4,42 @@ import {
     StyleSheet,
     Image,
     FlatList,
-    TouchableOpacity
+    TouchableOpacity,
+   SafeAreaView
 } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { FontAwesome } from '@expo/vector-icons'
 import { EvilIcons } from '@expo/vector-icons'
+import db from "../../firebase/firebaseConfig";
+import { collection, onSnapshot, getFirestore } from 'firebase/firestore';
+import { getAuth } from 'firebase/auth';
 
 const basicAvatar = require('../../../assets/images/avatars/avatar-1-2x.png')
 
-function DefaultPostsScreen({ route, navigation }) {
-    const [posts, setPosts] = useState([])
+function DefaultPostsScreen({navigation }) {
+    const [posts, setPosts] = useState([]);
+    const authFirebase = getAuth();
+    const user = authFirebase.currentUser;
+    
+    const getAllPosts = async() => {
+        const myDB = getFirestore();
+        const postsQuery = onSnapshot(collection(myDB, "posts"), (querySnapshot) => {
+            const documents = querySnapshot.docs.map((doc) => {
+                return {
+                    ...doc.data(),
+                    id: doc.id
+                }
+            });
+            setPosts(documents);
+        });
+        return () => postsQuery();
+};
+  
 
     useEffect(() => {
-        if (route.params) {
-            setPosts((prevState) => [...prevState, route.params])
-        }
-    }, [route.params])
+        getAllPosts();
+    }, []);
 
-    console.log(posts)
     return (
         <View style={styles.wrapper}>
             <View style={styles.userContainer}>
@@ -34,15 +52,16 @@ function DefaultPostsScreen({ route, navigation }) {
                 </View>
                 <View style={styles.credentials}>
                     <Text style={styles.userName}>
-                        Natali Romanova
+                        {user.displayName}
                     </Text>
-                    <Text style={styles.userMail}>email@example.com</Text>
+                    <Text style={styles.userMail}>{user.email}</Text>
                 </View>
             </View>
             <View style={styles.flatList}>
+                <SafeAreaView>
                 <FlatList
                     data={posts}
-                    keyExtractor={(item, idx) => idx.toString()}
+                    keyExtractor={(item) => item.id}
                     renderItem={({ item }) => (
                         <View style={{ height: 350, width: 350, paddingHorizontal: "auto", paddingVertical: "auto" }}>
                             <Image
@@ -57,35 +76,38 @@ function DefaultPostsScreen({ route, navigation }) {
                             <View style={styles.postIcons}>
                                 <TouchableOpacity
                                     onPress={() =>
-                                        navigation.navigate('Comments')
+                                        navigation.navigate('Comments', {postId: item.id})
                                     }
                                 >
                                    <View  style={{display: "flex", flexDirection:"row", margin: 0}}>
                                     <FontAwesome
                                         name="comments"
-                                        size={30}
+                                        size={25}
                                         color="black"
                                         />
                                       </View>
                                     </TouchableOpacity>
                                 <TouchableOpacity
                                     onPress={() =>
-                                        navigation.navigate('MapScreen')
+                                        navigation.navigate('MapScreen', {locationCoords: item.locationCoords, locationName: item.locationName})
                                     }
                                 >
                                    <View style={{display: "flex", flexDirection:"row",  margin: 0}}>
                                     <EvilIcons
                                         name="location"
-                                        size={30}
+                                        size={25}
                                         color="black"
                                         />
-                                        <Text >{ item.location }</Text>
+                                        <Text style={{textTransform: "uppercase", textDecorationLine: "underline"}}>
+                                            {item.locationName}
+                                        </Text>
                                       </View>
                                     </TouchableOpacity>
                             </View>
                         </View>
                     )}
-                />
+                    />
+                    </SafeAreaView>
             </View>
         </View>
     )
