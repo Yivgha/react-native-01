@@ -4,7 +4,8 @@ import {
     StyleSheet,
     Image,
     FlatList,
-    TouchableOpacity
+    TouchableOpacity,
+   SafeAreaView
 } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { FontAwesome } from '@expo/vector-icons'
@@ -57,9 +58,10 @@ function DefaultPostsScreen({navigation }) {
                 </View>
             </View>
             <View style={styles.flatList}>
+                <SafeAreaView>
                 <FlatList
                     data={posts}
-                    keyExtractor={(item, idx) => idx.toString()}
+                    keyExtractor={(item) => item.id}
                     renderItem={({ item }) => (
                         <View style={{ height: 350, width: 350, paddingHorizontal: "auto", paddingVertical: "auto" }}>
                             <Image
@@ -104,7 +106,8 @@ function DefaultPostsScreen({navigation }) {
                             </View>
                         </View>
                     )}
-                />
+                    />
+                    </SafeAreaView>
             </View>
         </View>
     )
