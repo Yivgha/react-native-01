@@ -8,7 +8,8 @@ import { Camera, CameraType } from 'expo-camera'
 import * as MediaLibrary from 'expo-media-library'
 import { useIsFocused } from '@react-navigation/native';
 import * as Location from "expo-location";
-import db from "../../firebase/firebaseConfig"
+import db from "../../firebase/firebaseConfig";
+import { getStorage, ref, uploadBytes } from "firebase/storage";
 
 function CreatePostsScreen({ navigation }, props) {
     const isFocused = useIsFocused()
@@ -49,10 +50,26 @@ function CreatePostsScreen({ navigation }, props) {
 
     const sendPhoto = () => {
         if (photo !== "") {
-        console.log("Posting");
+            console.log("Posting");
+            uploadPhotoToServer()
             navigation.navigate("DefaultPostsScreen", { photo, name, location });
             deletePhoto();
         }
+    };
+
+    const uploadPhotoToServer = async () => {
+        const response = await fetch(photo);
+        const file = await response.blob();
+
+        const storage = getStorage();
+        const uniquePostId = Date.now().toString();
+        const storageRef = ref(storage, `postImage/${uniquePostId}`);
+        
+        uploadBytes(storageRef, file).then((snapshot) => {
+  console.log('Upload success');
+});
+
+        // await db.storage().ref(`postImage/${uniquePostId}`).put(file)
     };
 
     const deletePhoto = () => {
