@@ -9,7 +9,7 @@ import * as MediaLibrary from 'expo-media-library'
 import { useIsFocused } from '@react-navigation/native';
 import * as Location from "expo-location";
 import db from "../../firebase/firebaseConfig";
-import { getStorage, ref, uploadBytes } from "firebase/storage";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 function CreatePostsScreen({ navigation }, props) {
     const isFocused = useIsFocused()
@@ -69,7 +69,8 @@ function CreatePostsScreen({ navigation }, props) {
   console.log('Upload success');
 });
 
-        // await db.storage().ref(`postImage/${uniquePostId}`).put(file)
+        const processedPhoto = await storage().ref("postImage").child(uniquePostId).getDownloadURL();
+        
     };
 
     const deletePhoto = () => {
