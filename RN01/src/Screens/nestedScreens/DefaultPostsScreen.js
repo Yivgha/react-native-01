@@ -9,19 +9,19 @@ import {
 import React, { useState, useEffect } from 'react'
 import { FontAwesome } from '@expo/vector-icons'
 import { EvilIcons } from '@expo/vector-icons'
-
 import db from "../../firebase/firebaseConfig";
-import {  collection, query, onSnapshot, doc, getFirestore, getDocs } from 'firebase/firestore';
+import { collection, onSnapshot, getFirestore } from 'firebase/firestore';
+import { getAuth } from 'firebase/auth';
 
 const basicAvatar = require('../../../assets/images/avatars/avatar-1-2x.png')
 
-function DefaultPostsScreen({ route, navigation }) {
+function DefaultPostsScreen({navigation }) {
     const [posts, setPosts] = useState([]);
-
+    const authFirebase = getAuth();
+    const user = authFirebase.currentUser;
+    
     const getAllPosts = async() => {
         const myDB = getFirestore();
-        
-        // const querySnapshot = await getDocs(collection(myDB, "posts"));
         const postsQuery = onSnapshot(collection(myDB, "posts"), (querySnapshot) => {
             const documents = querySnapshot.docs.map((doc) => {
                 return {
@@ -36,10 +36,9 @@ function DefaultPostsScreen({ route, navigation }) {
   
 
     useEffect(() => {
-       getAllPosts();
-    }, [])
+        getAllPosts();
+    }, []);
 
-    console.log(posts)
     return (
         <View style={styles.wrapper}>
             <View style={styles.userContainer}>
@@ -52,9 +51,9 @@ function DefaultPostsScreen({ route, navigation }) {
                 </View>
                 <View style={styles.credentials}>
                     <Text style={styles.userName}>
-                        Natali Romanova
+                        {user.displayName}
                     </Text>
-                    <Text style={styles.userMail}>email@example.com</Text>
+                    <Text style={styles.userMail}>{user.email}</Text>
                 </View>
             </View>
             <View style={styles.flatList}>
@@ -81,7 +80,7 @@ function DefaultPostsScreen({ route, navigation }) {
                                    <View  style={{display: "flex", flexDirection:"row", margin: 0}}>
                                     <FontAwesome
                                         name="comments"
-                                        size={30}
+                                        size={25}
                                         color="black"
                                         />
                                       </View>
@@ -94,10 +93,10 @@ function DefaultPostsScreen({ route, navigation }) {
                                    <View style={{display: "flex", flexDirection:"row",  margin: 0}}>
                                     <EvilIcons
                                         name="location"
-                                        size={30}
+                                        size={25}
                                         color="black"
                                         />
-                                        <Text>
+                                        <Text style={{textTransform: "uppercase", textDecorationLine: "underline"}}>
                                             {item.locationName}
                                         </Text>
                                       </View>

@@ -49,8 +49,6 @@ export default function RegistrationForm({ navigation }) {
 
         dispatch(authSignUpUser(state))
         setState(initialState)
-        
-        // navigation.navigate('Home')
     }
 
     const keyboardHide = () => {

@@ -44,7 +44,6 @@ export default function LoginForm({ navigation }) {
         console.log("logged", JSON.stringify(state))
         dispatch(authLogInUser(state))
         setState(initialState)
-        // navigation.navigate('Home')
     }
 
     const keyboardHide = () => {
