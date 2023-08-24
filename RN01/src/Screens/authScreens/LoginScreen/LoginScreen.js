@@ -17,7 +17,8 @@ import CustomInput from '../../../components/common/CustomTextInput'
 import { useKeyboardStatus } from '../../../hooks/isOpen'
 
 import { useDispatch } from 'react-redux'
-import {authLogInUser} from "../../../redux/auth/authOperations"
+import { authLogInUser } from "../../../redux/auth/authOperations"
+import db from '../../../firebase/firebaseConfig'
 
 const units = {
     width: Dimensions.get('window').width,

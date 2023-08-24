@@ -8,6 +8,7 @@ import { Camera, CameraType } from 'expo-camera'
 import * as MediaLibrary from 'expo-media-library'
 import { useIsFocused } from '@react-navigation/native';
 import * as Location from "expo-location";
+import db from "../../firebase/firebaseConfig"
 
 function CreatePostsScreen({ navigation }, props) {
     const isFocused = useIsFocused()
