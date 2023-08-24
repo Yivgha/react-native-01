@@ -79,7 +79,10 @@ function DefaultPostsScreen({ route, navigation }) {
                                         size={30}
                                         color="black"
                                         />
-                                        <Text >{ item.location }</Text>
+                                        <Text>
+                                            {/* {item.location} */}
+                                            Location
+                                        </Text>
                                       </View>
                                     </TouchableOpacity>
                             </View>

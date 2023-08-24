@@ -1,4 +1,5 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity, TextInput } from 'react-native'
+import {useSelector} from "react-redux"
 import { AntDesign } from '@expo/vector-icons'
 import { EvilIcons } from '@expo/vector-icons'
 import { FontAwesome } from '@expo/vector-icons'
@@ -10,26 +11,29 @@ import { useIsFocused } from '@react-navigation/native';
 import * as Location from "expo-location";
 import db from "../../firebase/firebaseConfig";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import {  collection, addDoc, getFirestore } from 'firebase/firestore';
 
 function CreatePostsScreen({ navigation }, props) {
-    const isFocused = useIsFocused()
+    const isFocused = useIsFocused();
+
     const [camera, setCamera] = useState(null);
     const [photo, setPhoto] = useState("");
-
-    const [hasPermission, setHasPermission] = useState(null);
-    const [type, setType] = useState(CameraType.back);
-
     const [location, setLocation] = useState("Set location");
     const [name, setName] = useState("");
+
+    const [type, setType] = useState(CameraType.back);
+
+    const { userId, nickname } = useSelector((state) => state.auth);
 
     const takePhoto = async () => {
         if (photo === "") {
             const photo = await camera.takePictureAsync();
             const location = await Location.getCurrentPositionAsync();
-        // console.log("Snap taken", photo.uri);
+
             console.log("location", location);
             setPhoto(photo.uri);
-            setLocation([location.coords.latitude, location.coords.longitude]);
+            setLocation(location);
+
         await MediaLibrary.createAssetAsync(photo.uri);
         } else {
             setPhoto("");
@@ -38,7 +42,6 @@ function CreatePostsScreen({ navigation }, props) {
         }
         
     };
-
 
     const flipCamera = () => {
         setType(
@@ -50,9 +53,9 @@ function CreatePostsScreen({ navigation }, props) {
 
     const sendPhoto = () => {
         if (photo !== "") {
-            console.log("Posting");
-            uploadPhotoToServer()
-            navigation.navigate("DefaultPostsScreen", { photo, name, location });
+            uploadPostToServer();
+            navigation.navigate("DefaultPostsScreen",
+                { photo, name, location });
             deletePhoto();
         }
     };
@@ -65,12 +68,21 @@ function CreatePostsScreen({ navigation }, props) {
         const uniquePostId = Date.now().toString();
         const storageRef = ref(storage, `postImage/${uniquePostId}`);
         
-        uploadBytes(storageRef, file).then((snapshot) => {
-  console.log('Upload success');
-});
+        await uploadBytes(storageRef, file).then((snapshot) => {console.log('Upload success');});       
 
-        const processedPhoto = await storage().ref("postImage").child(uniquePostId).getDownloadURL();
-        
+
+        const processedPhoto = await getDownloadURL(storageRef);
+
+        return processedPhoto;
+    };
+
+    const uploadPostToServer = async () => {
+        const photo = await uploadPhotoToServer();
+
+        const myDB = getFirestore();
+
+        const createPostRef = await addDoc(collection(myDB, "posts"), { photo, name, location: location.coords, userId, nickname });
+        return createPostRef;
     };
 
     const deletePhoto = () => {
@@ -88,20 +100,17 @@ function CreatePostsScreen({ navigation }, props) {
          (async () => {
              const { status } = await Camera.requestCameraPermissionsAsync();
              await Location.requestForegroundPermissionsAsync();
-        await MediaLibrary.requestPermissionsAsync();
-             setHasPermission(status === "granted");
+             await MediaLibrary.requestPermissionsAsync();
+             
+    if (status !== "granted") {
+      console.log("No access to camera");
+    return <Text>Enable access for Camera to proceed</Text>;
+    }
          })();  
      }, [photo, camera]);
   
 
-  if (hasPermission === null) {
-      console.log("Has permission");
-      return <View />
-  }
-    if (hasPermission === false) {
-      console.log("No access to camera");
-    return <Text>Enable access for Camera to proceed</Text>;
-    }
+  
     
     return (
         <View style={styles.wrapper}>
@@ -130,7 +139,8 @@ function CreatePostsScreen({ navigation }, props) {
                                         size={30}
                                         color="gray"
                                         />
-                <TextInput style={styles.mainText} value={location} onChange={newLoc => setLocation(newLoc)} placeholder={location.toString()} />
+                <TextInput style={styles.mainText} value={location} onChange={newLoc => setLocation(newLoc)}
+                    placeholder={`${location?.coords?.latitude?.toString()}, ${location?.coords?.longitude?.toString()}`} />
             </View>
 
              <View>
