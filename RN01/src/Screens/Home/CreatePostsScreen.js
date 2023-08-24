@@ -18,7 +18,8 @@ function CreatePostsScreen({ navigation }, props) {
 
     const [camera, setCamera] = useState(null);
     const [photo, setPhoto] = useState("");
-    const [location, setLocation] = useState("Set location");
+    const [locationName, setLocationName] = useState("");
+    const [locationCoords, setLocationCoords] = useState("");
     const [name, setName] = useState("");
 
     const [type, setType] = useState(CameraType.back);
@@ -32,13 +33,15 @@ function CreatePostsScreen({ navigation }, props) {
 
             console.log("location", location);
             setPhoto(photo.uri);
-            setLocation(location);
+            setLocationName(locationName);
+            setLocationCoords(location)
 
         await MediaLibrary.createAssetAsync(photo.uri);
         } else {
             setPhoto("");
             setName("");
-            setLocation("");
+            setLocationName("");
+            setLocationCoords("")
         }
         
     };
@@ -54,8 +57,7 @@ function CreatePostsScreen({ navigation }, props) {
     const sendPhoto = () => {
         if (photo !== "") {
             uploadPostToServer();
-            navigation.navigate("DefaultPostsScreen",
-                { photo, name, location });
+            navigation.navigate("DefaultPostsScreen");
             deletePhoto();
         }
     };
@@ -81,7 +83,8 @@ function CreatePostsScreen({ navigation }, props) {
 
         const myDB = getFirestore();
 
-        const createPostRef = await addDoc(collection(myDB, "posts"), { photo, name, location: location.coords, userId, nickname });
+        const createPostRef = await addDoc(collection(myDB, "posts"),
+            { photo, name, locationCoords: locationCoords.coords, locationName, userId, nickname });
         return createPostRef;
     };
 
@@ -90,7 +93,8 @@ function CreatePostsScreen({ navigation }, props) {
             console.log("Deleted");
             setPhoto("");
             setName("");
-            setLocation("");
+            setLocationCoords("");
+            setLocationName("")
         } else {
             console.log("Nothing to delete");
         }
@@ -130,7 +134,7 @@ function CreatePostsScreen({ navigation }, props) {
             </View>
 
             <View style={styles.nameBox}>
-                <TextInput style={styles.mainText} value={name} placeholder='Set name' onChangeText={text => setName(text)} />
+                <TextInput style={styles.mainText} value={name} placeholder='Set description' onChangeText={text => setName(text)} />
             </View>
 
             <View style={styles.locationBox}>
@@ -139,8 +143,8 @@ function CreatePostsScreen({ navigation }, props) {
                                         size={30}
                                         color="gray"
                                         />
-                <TextInput style={styles.mainText} value={location} onChange={newLoc => setLocation(newLoc)}
-                    placeholder={`${location?.coords?.latitude?.toString()}, ${location?.coords?.longitude?.toString()}`} />
+                <TextInput style={styles.mainText} value={locationName} onChangeText={newLoc => setLocationName(newLoc)}
+                    placeholder="Set location name" />
             </View>
 
              <View>

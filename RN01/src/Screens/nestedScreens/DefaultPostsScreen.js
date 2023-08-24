@@ -10,16 +10,34 @@ import React, { useState, useEffect } from 'react'
 import { FontAwesome } from '@expo/vector-icons'
 import { EvilIcons } from '@expo/vector-icons'
 
+import db from "../../firebase/firebaseConfig";
+import {  collection, query, onSnapshot, doc, getFirestore, getDocs } from 'firebase/firestore';
+
 const basicAvatar = require('../../../assets/images/avatars/avatar-1-2x.png')
 
 function DefaultPostsScreen({ route, navigation }) {
-    const [posts, setPosts] = useState([])
+    const [posts, setPosts] = useState([]);
+
+    const getAllPosts = async() => {
+        const myDB = getFirestore();
+        
+        // const querySnapshot = await getDocs(collection(myDB, "posts"));
+        const postsQuery = onSnapshot(collection(myDB, "posts"), (querySnapshot) => {
+            const documents = querySnapshot.docs.map((doc) => {
+                return {
+                    ...doc.data(),
+                    id: doc.id
+                }
+            });
+            setPosts(documents);
+        });
+        return () => postsQuery();
+};
+  
 
     useEffect(() => {
-        if (route.params) {
-            setPosts((prevState) => [...prevState, route.params])
-        }
-    }, [route.params])
+       getAllPosts();
+    }, [])
 
     console.log(posts)
     return (
@@ -70,7 +88,7 @@ function DefaultPostsScreen({ route, navigation }) {
                                     </TouchableOpacity>
                                 <TouchableOpacity
                                     onPress={() =>
-                                        navigation.navigate('MapScreen')
+                                        navigation.navigate('MapScreen', {locationCoords: item.locationCoords, locationName: item.locationName})
                                     }
                                 >
                                    <View style={{display: "flex", flexDirection:"row",  margin: 0}}>
@@ -80,8 +98,7 @@ function DefaultPostsScreen({ route, navigation }) {
                                         color="black"
                                         />
                                         <Text>
-                                            {/* {item.location} */}
-                                            Location
+                                            {item.locationName}
                                         </Text>
                                       </View>
                                     </TouchableOpacity>
