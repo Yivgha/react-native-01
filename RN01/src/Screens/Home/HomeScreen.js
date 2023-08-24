@@ -1,23 +1,16 @@
+import React from 'react'
+import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { Feather } from '@expo/vector-icons'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
-import React from 'react'
-import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import CreatePostsScreen from './CreatePostsScreen'
 import ProfileScreen from './ProfileScreen'
 import PostsScreen from './PostsScreen'
-import { authLogOutUser } from "../../redux/auth/authOperations";
-import {useDispatch } from 'react-redux';
 
 const MainTab = createBottomTabNavigator()
 
 function HomeScreen({ navigation }) {
-    const dispatch = useDispatch();
 
-    const logout = () => {
-        dispatch(authLogOutUser())
-    };
-    
     return (
         <MainTab.Navigator
             initialRouteName="Posts"
@@ -55,36 +48,9 @@ function HomeScreen({ navigation }) {
             <MainTab.Screen
                 name="Posts"
                 component={PostsScreen}
-                options={{
-                    title: 'Posts',
-                    headerTitleAlign: 'center',
-                    headerStyle: {
-                        backgroundColor: '#FFFFFF',
-                        borderBottomColor: 'rgba(0, 0, 0, 0.3)',
-                        borderBottomWidth: 1,
-                    },
-
-                    headerTintColor: '#212121',
-                    headerTitleStyle: {
-                        fontFamily: 'Roboto-Bold',
-                        fontSize: 17,
-                        lineHeight: 19,
-                        paddingTop: 11,
-                        paddingBottom: 11,
-                    },
-                    headerRight: () => (
-                        <TouchableOpacity
-                            onPress={() => logout()}
-                        >
-                            <Feather
-                                name="log-out"
-                                size={24}
-                                color="#BDBDBD"
-                                style={{ marginRight: 16 }}
-                            />
-                        </TouchableOpacity>
-                    ),
-                }}
+                options={() => ({
+                    headerShown: false,
+                })}
             />
             <MainTab.Screen
                 name="Create"
@@ -107,9 +73,7 @@ function HomeScreen({ navigation }) {
                         paddingBottom: 11,
                     },
                     headerLeft: () => (
-                        <TouchableOpacity
-                            onPress={() => navigation.navigate('Posts', { name: 'Posts' })}
-                        >
+                        <TouchableOpacity onPress={() => navigation.goBack()}>
                             <MaterialCommunityIcons
                                 name="arrow-left"
                                 size={24}
@@ -132,9 +96,7 @@ function HomeScreen({ navigation }) {
             />
         </MainTab.Navigator>
     )
-    }
-
-
+}
 
 const styles = StyleSheet.create({
     iconContainer: {
