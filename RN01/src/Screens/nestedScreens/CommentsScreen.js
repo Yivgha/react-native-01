@@ -24,7 +24,7 @@ function CommentsScreen({ route }) {
     const { postId, photo, name } = route.params;
     const [comment, setComment] = useState('')
     const [allComm, setAllComm] = useState([])
-
+// const totalComm = [];
     const { nickname } = useSelector((state) => state.auth)
 
     const myDB = getFirestore()
@@ -34,6 +34,7 @@ function CommentsScreen({ route }) {
         createComment()
         setComment('')
     };
+
 
     const createComment = async () => {
         const date = new Date();
@@ -54,7 +55,7 @@ function CommentsScreen({ route }) {
                     return {
                         ...doc.data(),
                         id: doc.id,
-                        date:doc.commentDate
+                        date: doc.commentDate,
                     }
                 })
                 setAllComm(documents)
@@ -63,9 +64,23 @@ function CommentsScreen({ route }) {
         return () => commQuery()
     }
 
+    // const getCommNumber = async () => {
+    //     const commQ = await onSnapshot(collection(myDB, `posts/${postId}/comments`), (querySnapshot) => {
+    //         querySnapshot.docs.forEach((doc) => {
+    //             totalComm.push(doc);
+                
+    //         })
+    //     });
+    //     console.log(totalComm.length);
+    //     return commQ
+    // }
+
     useEffect(() => {
         getAllComments();
+       
     }, [])
+
+    // useEffect(()=>{ getCommNumber()},[])
 
     return (
         <View style={styles.wrapper}>
@@ -102,6 +117,7 @@ function CommentsScreen({ route }) {
                     value={comment}
                     onChangeText={(text) => setComment(text)}
                     placeholder="Comment..."
+                    maxLength={60}
                 />
                 <TouchableOpacity
                     style={styles.sendCommBtn}
@@ -185,10 +201,13 @@ const styles = StyleSheet.create({
         borderBottomRightRadius: 10,
         width: 270,
         minHeight: 70,
+        // maxHeight: 100,
         paddingTop: 10,
         paddingBottom: 5,
         paddingLeft: 10,
+        marginBottom: 30,
         textAlign: 'center',
+        justifyContent: "center",
         backgroundColor: "#BDBDBD"
     },
     sendCommBtn: {

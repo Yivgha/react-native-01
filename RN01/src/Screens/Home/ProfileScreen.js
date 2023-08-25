@@ -22,14 +22,14 @@ import {
     where,
     getDocs,
     onSnapshot,
+    getCountFromServer
 } from 'firebase/firestore'
 import { getAuth } from 'firebase/auth'
 
 const bgImg = require('../../../assets/images/bg-img-1x.jpg')
 
-function ProfileScreen({ navigation }) {
+function ProfileScreen({ navigation}) {
     const [profilePosts, setProfilePosts] = useState([])
-
     const dispatch = useDispatch()
     const myDB = getFirestore()
     const authFirebase = getAuth()
@@ -52,11 +52,19 @@ function ProfileScreen({ navigation }) {
                 id: doc.id,
             }
         })
-        setProfilePosts(documents)
-    }
+        setProfilePosts(documents);
+    };
+
+    // const getCommentsLength = async () => {
+    //         const getComCol = query(collection(myDB, `posts/${id}/comments`));
+    //         const comSnap = getCountFromServer(getComCol);
+    //         // console.log('count: ', comSnap.data().count);
+    //         console.log(comSnap);
+    // }
 
     useEffect(() => {
         getUserPosts()
+        //  getCommentsLength()
     }, [])
     return (
         <View style={styles.wrapper}>
@@ -98,7 +106,9 @@ function ProfileScreen({ navigation }) {
                                         <TouchableOpacity
                                                 style={styles.socialBtn}
                                                 onPress={() =>
-                                        navigation.navigate('Comments', {postId: item.id})
+                                        {navigation.navigate('Comments', { postId: item.id,
+                                                photo: item.photo,
+                                                name: item.name,})}
                                     }
                                         >
                                             <FontAwesome
@@ -107,7 +117,7 @@ function ProfileScreen({ navigation }) {
                                                 color="#FF6C00"
                                                 style={{ marginRight: 3 }}
                                             />
-                                            <Text>1</Text>
+                                                <Text>{ }</Text>
                                         </TouchableOpacity>
                                         <TouchableOpacity style={styles.socialBtn}>
                                             
@@ -117,7 +127,7 @@ function ProfileScreen({ navigation }) {
                                                     color="#FF6C00"
                                                     style={{ marginRight: 3 }}
                                                 />
-                                                <Text>1</Text>
+                                                <Text>put</Text>
                                             </TouchableOpacity>
                                             </View>
                                         <TouchableOpacity
