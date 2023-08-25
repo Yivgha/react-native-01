@@ -31,7 +31,7 @@ function MapScreen({route}) {
                 }}
                 mapType="standard"
         minZoomLevel = {15}
-        onMapReady={() => console.log("Map is ready")}
+        // onMapReady={() => console.log("Map is ready")}
                 showsUserLocation={true}
             >
                 {latitude && longitude && (
