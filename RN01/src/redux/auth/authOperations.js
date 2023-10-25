@@ -1,15 +1,15 @@
-import { getAuth, updateProfile, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { getAuth, getStorage, updateProfile, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { authSlice} from "./authReducer";
  
-const authSignUpUser = ({ email, password, nickname }) => async (dispatch, getState) => {
+const authSignUpUser = ({ email, password, nickname, photoURL }) => async (dispatch, getState) => {
     try {
         const authFirebase = getAuth()
         await createUserWithEmailAndPassword(authFirebase, email, password);
         
         const user = authFirebase.currentUser;
-         updateProfile(user, {displayName: nickname})
+         updateProfile(user, {displayName: nickname, photoURL: photoURL})
 
-        dispatch(authSlice.actions.updateUserProfile({userId: user.uid, nickname: user.displayName}))
+        dispatch(authSlice.actions.updateUserProfile({userId: user.uid, nickname: user.displayName, photoURL: user.photoURL}))
         
     } catch (error) {
         console.log("error", error.code, error.message);
@@ -37,7 +37,7 @@ const authChangeUser = () => async (dispatch, getState) => {
     authFirebase.onAuthStateChanged((user) => {
         if (user) {
             dispatch(authSlice.actions.authStateChange({ stateChange: true }));
-            dispatch(authSlice.actions.updateUserProfile({ userId: user.uid, nickname: user.displayName }));
+            dispatch(authSlice.actions.updateUserProfile({ userId: user.uid}));
        }
    })
 }

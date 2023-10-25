@@ -12,7 +12,7 @@ import {
 import React, { useState, useEffect } from 'react'
 import AvatarInput from '../../components/common/Avatar'
 import { TouchableOpacity } from 'react-native-gesture-handler'
-import { authLogOutUser } from '../../redux/auth/authOperations'
+import { authLogOutUser} from '../../redux/auth/authOperations'
 import { useDispatch, useSelector } from 'react-redux'
 import db from '../../firebase/firebaseConfig'
 import {
@@ -26,9 +26,11 @@ import {
 } from 'firebase/firestore'
 import { getAuth } from 'firebase/auth'
 
-const bgImg = require('../../../assets/images/bg-img-1x.jpg')
+const bgImg = require('../../../assets/images/bg-img-1x.jpg');
+// const basicAvatar = require("../../../assets/images/avatars/cat.jpg")
 
-function ProfileScreen({ navigation}) {
+function ProfileScreen({ navigation }) {
+    
     const [profilePosts, setProfilePosts] = useState([])
     const dispatch = useDispatch()
     const myDB = getFirestore()
@@ -65,13 +67,15 @@ function ProfileScreen({ navigation}) {
     useEffect(() => {
         getUserPosts()
         //  getCommentsLength()
-    }, [])
+    }, []);
+
+ 
     return (
         <View style={styles.wrapper}>
             <ImageBackground source={bgImg} style={styles.image}>
                 <View style={styles.container}>
                     <View style={styles.topBox}>
-                        <AvatarInput />
+                        <AvatarInput value={user?.photoURL} />
                         <TouchableOpacity onPress={logout}>
                             <Feather
                                 name="log-out"
