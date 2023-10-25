@@ -19,13 +19,18 @@ import {
     getDoc,
     onSnapshot,
 } from 'firebase/firestore'
+import { getAuth} from 'firebase/auth'
 
 function CommentsScreen({ route }) {
     const { postId, photo, name } = route.params;
     const [comment, setComment] = useState('')
     const [allComm, setAllComm] = useState([])
-// const totalComm = [];
-    const { nickname } = useSelector((state) => state.auth)
+    // const totalComm = [];
+   const authFirebase = getAuth()
+    const user = authFirebase.currentUser
+
+    // const { nickname, photoURL } = useSelector((state) => state.auth)
+    const { displayName, photoURL } = user
 
     const myDB = getFirestore()
 
@@ -42,7 +47,7 @@ function CommentsScreen({ route }) {
         
         const createCommentRef = await addDoc(
             collection(myDB, `posts/${postId}/comments`),
-            { comment, nickname,  commentDate }
+            { comment, displayName, photoURL, commentDate }
         )
         return createCommentRef
     }
@@ -96,15 +101,15 @@ function CommentsScreen({ route }) {
                         renderItem={({ item }) => (
                             <View style={styles.oneComment}>
                                 <View>
-                            <Text style={styles.commNick}>
-                                    {item.nickname}
-                                </Text>
+                                    {item?.photoURL === null ? (<Text style={styles.commNick}>{item?.displayName}</Text>)
+                                        : (<Image source={{ uri: item?.photoURL }} alt="avatar" style={styles.commNick} />)}
+                                    
                                 </View>
                                 <View style={styles.commText}>
                                 <Text style={{color: "#212121", fontSize: 18, marginBottom: 8}} >
-                                    {item.comment}
+                                    {item?.comment}
                                 </Text>
-                                    <Text style={{color: "gray", fontSize: 13}}>{item.commentDate }</Text>
+                                    <Text style={{color: "gray", fontSize: 13}}>{item?.commentDate }</Text>
                                     </View>
                             </View>
                         )}

@@ -27,7 +27,7 @@ const units = {
 
 const initialState = {
     email: '',
-    password: '',
+    password: ''
 }
 const bgImg = require('../../../../assets/images/bg-img-1x.jpg')
 
@@ -41,7 +41,7 @@ export default function LoginForm({ navigation }) {
     const submitForm = () => {
         setIsShowKeyboard(true)
         Keyboard.dismiss()
-        console.log("logged", JSON.stringify(state))
+        // console.log("logged", JSON.stringify(state))
         dispatch(authLogInUser(state))
         setState(initialState)
     }

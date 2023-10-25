@@ -1,14 +1,50 @@
-import { useState } from 'react'
+import { useState} from 'react'
 import { StyleSheet, View, Image, TouchableOpacity } from 'react-native'
 import * as ImagePicker from 'expo-image-picker'
+import { getAuth, updateProfile } from 'firebase/auth'
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 const noAvatar = require('../../../assets/images/no-avatar-1x.png')
 const addBtnImg = require('../../../assets/images/add-btn.png')
 const deleteBtnImg = require('../../../assets/images/cancel-circle.png')
 
 const AvatarInput = ({ value, onChange, style, ...props }) => {
-    const [image, setImage] = useState('')
+    
+   
 
+    const authFirebase = getAuth()
+    const user = authFirebase.currentUser
+
+    const [image, setImage] = useState(user?.photoURL !== null ? user?.photoURL : null);
+
+const uploadAvatarToServer = async (image) => {
+        const response = await fetch(image);
+        const file = await response.blob();
+
+        const storage = getStorage();
+        const uniqueAvatarId = Date.now().toString();
+        const storageRef = ref(storage, `profilePic/${uniqueAvatarId}`);
+        
+        await uploadBytes(storageRef, file).then((snapshot) => {console.log('Upload success');});       
+
+        const processedPhoto = await getDownloadURL(storageRef);
+        return processedPhoto;
+    };
+
+
+    const updateProfilePic = async (image) => {
+        try {
+            const photoURL = await uploadAvatarToServer(image, user.uid);
+
+            await updateProfile(user, {
+                photoURL: photoURL
+            });
+            
+        } catch (e) {
+            console.log(e);
+        }
+    };
+    
     const pickImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -25,8 +61,8 @@ const AvatarInput = ({ value, onChange, style, ...props }) => {
 
     const onReset = () => {
         setImage('')
-    }
-
+    };
+    
     return (
         <View
             style={[
@@ -34,16 +70,16 @@ const AvatarInput = ({ value, onChange, style, ...props }) => {
                 { transform: [{ translateY: -50 }, { translateX: 14 }] },
             ]}
         >
-            {image ? (
-                image && (
+            {image !== null ? (
+               
                     <Image
                         value={value}
                         source={{ uri: image }}
                         style={[{ width: 120, height: 120 }, style]}
-                        onChange={onChange}
+                        onChange={updateProfilePic(image)}
                         {...props}
                     />
-                )
+                
             ) : (
                 <Image source={noAvatar} style={styles.noAvatar} />
             )}

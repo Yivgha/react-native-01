@@ -29,6 +29,7 @@ const initialState = {
     nickname: '',
     email: '',
     password: '',
+    photoURL: ""
 }
 const bgImg = require('../../../../assets/images/bg-img-1x.jpg')
 
@@ -69,15 +70,7 @@ export default function RegistrationForm({ navigation }) {
                                 Platform.OS === 'ios' ? 'padding' : 'height'
                             }
                         >
-                            <AvatarInput
-                                value={state.photo}
-                                onChange={(value) => {
-                                    setState((prevState) => ({
-                                        ...prevState,
-                                        photo: value,
-                                    }))
-                                }}
-                            />
+                            <AvatarInput value={state?.photoURL} />
                             <Text style={styles.title}>Registration</Text>
                             <CustomInput
                                 value={state.nickname}

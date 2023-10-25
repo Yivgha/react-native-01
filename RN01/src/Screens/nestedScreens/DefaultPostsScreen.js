@@ -14,7 +14,7 @@ import db from '../../firebase/firebaseConfig'
 import { collection, onSnapshot, getFirestore } from 'firebase/firestore'
 import { getAuth } from 'firebase/auth'
 
-const basicAvatar = require('../../../assets/images/avatars/avatar-1-2x.png')
+const basicAvatar = require('../../../assets/images/avatars/cat.jpg')
 
 function DefaultPostsScreen({ navigation }) {
     const [posts, setPosts] = useState([])
@@ -36,21 +36,25 @@ function DefaultPostsScreen({ navigation }) {
             }
         )
         return () => postsQuery()
-    }
+    };
+
+
 
     useEffect(() => {
-        getAllPosts()
+        getAllPosts();
     }, [])
 
+    
     return (
         <View style={styles.wrapper}>
             <View style={styles.userContainer}>
                 <View style={styles.avatar}>
-                    <Image
-                        source={basicAvatar}
+                    {user?.photoURL !== null ? <Image
+                        source={{uri: user?.photoURL}}
                         title="avatar"
                         style={{ width: 60, height: 60 }}
-                    />
+                    /> : basicAvatar}
+                    
                 </View>
                 <View style={styles.credentials}>
                     <Text style={styles.userName}>{user.displayName}</Text>
