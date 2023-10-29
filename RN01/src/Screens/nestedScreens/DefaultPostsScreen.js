@@ -36,25 +36,25 @@ function DefaultPostsScreen({ navigation }) {
             }
         )
         return () => postsQuery()
-    };
-
-
+    }
 
     useEffect(() => {
-        getAllPosts();
+        getAllPosts()
     }, [])
 
-    
     return (
         <View style={styles.wrapper}>
             <View style={styles.userContainer}>
                 <View style={styles.avatar}>
-                    {user?.photoURL !== null ? <Image
-                        source={{uri: user?.photoURL}}
-                        title="avatar"
-                        style={{ width: 60, height: 60 }}
-                    /> : basicAvatar}
-                    
+                    {user?.photoURL !== null ? (
+                        <Image
+                            source={{ uri: user?.photoURL }}
+                            title="avatar"
+                            style={{ width: 60, height: 60, borderRadius: 16 }}
+                        />
+                    ) : (
+                        basicAvatar
+                    )}
                 </View>
                 <View style={styles.credentials}>
                     <Text style={styles.userName}>{user.displayName}</Text>
@@ -73,7 +73,7 @@ function DefaultPostsScreen({ navigation }) {
                                     style={{
                                         height: 240,
                                         width: 380,
-                                        borderRadius: 10
+                                        borderRadius: 10,
                                     }}
                                 />
                                 <Text style={styles.photoName}>
@@ -200,15 +200,15 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        paddingHorizontal: 10
+        paddingHorizontal: 10,
     },
     photoName: {
         color: '#212121',
         marginTop: 10,
         marginBottom: 0,
-        textTransform: "uppercase",
-       textDecorationLine: "underline",
-        paddingHorizontal: 5
+        textTransform: 'uppercase',
+        textDecorationLine: 'underline',
+        paddingHorizontal: 5,
     },
 })
 
