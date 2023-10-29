@@ -12,7 +12,7 @@ import {
 import React, { useState, useEffect } from 'react'
 import AvatarInput from '../../components/common/Avatar'
 import { TouchableOpacity } from 'react-native-gesture-handler'
-import { authLogOutUser} from '../../redux/auth/authOperations'
+import { authLogOutUser } from '../../redux/auth/authOperations'
 import { useDispatch, useSelector } from 'react-redux'
 import db from '../../firebase/firebaseConfig'
 import {
@@ -22,15 +22,14 @@ import {
     where,
     getDocs,
     onSnapshot,
-    getCountFromServer
+    getCountFromServer,
 } from 'firebase/firestore'
 import { getAuth } from 'firebase/auth'
 
-const bgImg = require('../../../assets/images/bg-img-1x.jpg');
+const bgImg = require('../../../assets/images/bg-img-1x.jpg')
 // const basicAvatar = require("../../../assets/images/avatars/cat.jpg")
 
 function ProfileScreen({ navigation }) {
-    
     const [profilePosts, setProfilePosts] = useState([])
     const dispatch = useDispatch()
     const myDB = getFirestore()
@@ -54,8 +53,8 @@ function ProfileScreen({ navigation }) {
                 id: doc.id,
             }
         })
-        setProfilePosts(documents);
-    };
+        setProfilePosts(documents)
+    }
 
     // const getCommentsLength = async () => {
     //         const getComCol = query(collection(myDB, `posts/${id}/comments`));
@@ -67,15 +66,17 @@ function ProfileScreen({ navigation }) {
     useEffect(() => {
         getUserPosts()
         //  getCommentsLength()
-    }, []);
+    }, [])
 
- 
     return (
         <View style={styles.wrapper}>
             <ImageBackground source={bgImg} style={styles.image}>
                 <View style={styles.container}>
                     <View style={styles.topBox}>
-                        <AvatarInput value={user?.photoURL} />
+                        <AvatarInput
+                            value={user?.photoURL}
+                            style={{ borderRadius: 16 }}
+                        />
                         <TouchableOpacity onPress={logout}>
                             <Feather
                                 name="log-out"
@@ -106,25 +107,36 @@ function ProfileScreen({ navigation }) {
                                     </Text>
 
                                     <View style={styles.postSocials}>
-                                        <View style={{display: "flex", flexDirection: "row"}}>
-                                        <TouchableOpacity
-                                                style={styles.socialBtn}
-                                                onPress={() =>
-                                        {navigation.navigate('Comments', { postId: item.id,
-                                                photo: item.photo,
-                                                name: item.name,})}
-                                    }
+                                        <View
+                                            style={{
+                                                display: 'flex',
+                                                flexDirection: 'row',
+                                            }}
                                         >
-                                            <FontAwesome
-                                                name="comments"
-                                                size={24}
-                                                color="#FF6C00"
-                                                style={{ marginRight: 3 }}
-                                            />
-                                                <Text>{ }</Text>
-                                        </TouchableOpacity>
-                                        <TouchableOpacity style={styles.socialBtn}>
-                                            
+                                            <TouchableOpacity
+                                                style={styles.socialBtn}
+                                                onPress={() => {
+                                                    navigation.navigate(
+                                                        'Comments',
+                                                        {
+                                                            postId: item.id,
+                                                            photo: item.photo,
+                                                            name: item.name,
+                                                        }
+                                                    )
+                                                }}
+                                            >
+                                                <FontAwesome
+                                                    name="comments"
+                                                    size={24}
+                                                    color="#FF6C00"
+                                                    style={{ marginRight: 3 }}
+                                                />
+                                                <Text>{}</Text>
+                                            </TouchableOpacity>
+                                            <TouchableOpacity
+                                                style={styles.socialBtn}
+                                            >
                                                 <Feather
                                                     name="thumbs-up"
                                                     size={24}
@@ -133,12 +145,20 @@ function ProfileScreen({ navigation }) {
                                                 />
                                                 <Text>put</Text>
                                             </TouchableOpacity>
-                                            </View>
+                                        </View>
                                         <TouchableOpacity
                                             style={styles.socialBtn}
                                             onPress={() =>
-                                        navigation.navigate('MapScreen', {locationCoords: item.locationCoords, locationName: item.locationName})
-                                    }
+                                                navigation.navigate(
+                                                    'MapScreen',
+                                                    {
+                                                        locationCoords:
+                                                            item.locationCoords,
+                                                        locationName:
+                                                            item.locationName,
+                                                    }
+                                                )
+                                            }
                                         >
                                             <Feather
                                                 name="map-pin"
