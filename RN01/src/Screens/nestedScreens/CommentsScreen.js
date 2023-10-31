@@ -19,14 +19,14 @@ import {
     getDoc,
     onSnapshot,
 } from 'firebase/firestore'
-import { getAuth} from 'firebase/auth'
+import { getAuth } from 'firebase/auth'
 
 function CommentsScreen({ route }) {
-    const { postId, photo, name } = route.params;
+    const { postId, photo, name } = route.params
     const [comment, setComment] = useState('')
     const [allComm, setAllComm] = useState([])
     // const totalComm = [];
-   const authFirebase = getAuth()
+    const authFirebase = getAuth()
     const user = authFirebase.currentUser
 
     // const { nickname, photoURL } = useSelector((state) => state.auth)
@@ -38,13 +38,12 @@ function CommentsScreen({ route }) {
         console.log('Sending comment', comment)
         createComment()
         setComment('')
-    };
-
+    }
 
     const createComment = async () => {
-        const date = new Date();
-        const commentDate = date.toUTCString();
-        
+        const date = new Date()
+        const commentDate = date.toUTCString()
+
         const createCommentRef = await addDoc(
             collection(myDB, `posts/${postId}/comments`),
             { comment, displayName, photoURL, commentDate }
@@ -63,58 +62,68 @@ function CommentsScreen({ route }) {
                         date: doc.commentDate,
                     }
                 })
+
+                // //get number of comments to one post
+                // const totalCommOnOnePost = querySnapshot.size
+                // console.log(totalCommOnOnePost)
+
                 setAllComm(documents)
             }
         )
         return () => commQuery()
     }
 
-    // const getCommNumber = async () => {
-    //     const commQ = await onSnapshot(collection(myDB, `posts/${postId}/comments`), (querySnapshot) => {
-    //         querySnapshot.docs.forEach((doc) => {
-    //             totalComm.push(doc);
-                
-    //         })
-    //     });
-    //     console.log(totalComm.length);
-    //     return commQ
-    // }
-
     useEffect(() => {
-        getAllComments();
-       
+        getAllComments()
     }, [])
-
-    // useEffect(()=>{ getCommNumber()},[])
 
     return (
         <View style={styles.wrapper}>
             <View style={styles.pictureInComm}>
-                <Image source={{uri: `${photo}`}} alt={`${name}`} style={{width: 340, height: 240, borderRadius: 10}} />
+                <Image
+                    source={{ uri: `${photo}` }}
+                    alt={`${name}`}
+                    style={{ width: 340, height: 240, borderRadius: 10 }}
+                />
             </View>
 
-
-                <SafeAreaView style={styles.commBlock}>
-                    <FlatList
-                        data={allComm}
-                        keyExtractor={(item) => item.id}
-                        renderItem={({ item }) => (
-                            <View style={styles.oneComment}>
-                                <View>
-                                    {item?.photoURL === null ? (<Text style={styles.commNick}>{item?.displayName}</Text>)
-                                        : (<Image source={{ uri: item?.photoURL }} alt="avatar" style={styles.commNick} />)}
-                                    
-                                </View>
-                                <View style={styles.commText}>
-                                <Text style={{color: "#212121", fontSize: 18, marginBottom: 8}} >
+            <SafeAreaView style={styles.commBlock}>
+                <FlatList
+                    data={allComm}
+                    keyExtractor={(item) => item.id}
+                    renderItem={({ item }) => (
+                        <View style={styles.oneComment}>
+                            <View>
+                                {item?.photoURL === null ? (
+                                    <Text style={styles.commNick}>
+                                        {item?.displayName}
+                                    </Text>
+                                ) : (
+                                    <Image
+                                        source={{ uri: item?.photoURL }}
+                                        alt="avatar"
+                                        style={styles.commNick}
+                                    />
+                                )}
+                            </View>
+                            <View style={styles.commText}>
+                                <Text
+                                    style={{
+                                        color: '#212121',
+                                        fontSize: 18,
+                                        marginBottom: 8,
+                                    }}
+                                >
                                     {item?.comment}
                                 </Text>
-                                    <Text style={{color: "gray", fontSize: 13}}>{item?.commentDate }</Text>
-                                    </View>
+                                <Text style={{ color: 'gray', fontSize: 13 }}>
+                                    {item?.commentDate}
+                                </Text>
                             </View>
-                        )}
-                    />
-                </SafeAreaView>
+                        </View>
+                    )}
+                />
+            </SafeAreaView>
 
             <View style={styles.commentInputBox}>
                 <TextInput
@@ -184,7 +193,7 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'center',
-        alignItems: "baseline",
+        alignItems: 'baseline',
         width: 340,
         height: 110,
     },
@@ -193,27 +202,26 @@ const styles = StyleSheet.create({
         height: 40,
         marginRight: 10,
         borderRadius: 30,
-        // border: 'transparent',
+        border: 'transparent',
         outline: 'none',
-        alignItems: "center",
-        justifyContent: "center",
+        alignItems: 'center',
+        justifyContent: 'center',
         borderWidth: 1,
-        borderColor: "red"
     },
     commText: {
-       border: "transparent",
+        border: 'transparent',
         borderTopRightRadius: 10,
         borderBottomRightRadius: 10,
         width: 270,
         minHeight: 70,
-        // maxHeight: 100,
+        maxHeight: 100,
         paddingTop: 10,
         paddingBottom: 5,
         paddingLeft: 10,
         marginBottom: 30,
         textAlign: 'center',
-        justifyContent: "center",
-        backgroundColor: "#BDBDBD"
+        justifyContent: 'center',
+        backgroundColor: '#BDBDBD',
     },
     sendCommBtn: {
         backgroundColor: '#FF6C00',
@@ -221,7 +229,7 @@ const styles = StyleSheet.create({
         width: 34,
         height: 34,
         borderRadius: 50,
-        border: "transparent",
+        border: 'transparent',
         outline: 'none',
         display: 'flex',
         alignItems: 'center',
