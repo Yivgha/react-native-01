@@ -56,16 +56,8 @@ function ProfileScreen({ navigation }) {
         setProfilePosts(documents)
     }
 
-    // const getCommentsLength = async () => {
-    //         const getComCol = query(collection(myDB, `posts/${id}/comments`));
-    //         const comSnap = getCountFromServer(getComCol);
-    //         // console.log('count: ', comSnap.data().count);
-    //         console.log(comSnap);
-    // }
-
     useEffect(() => {
         getUserPosts()
-        //  getCommentsLength()
     }, [])
 
     return (
@@ -132,7 +124,9 @@ function ProfileScreen({ navigation }) {
                                                     color="#FF6C00"
                                                     style={{ marginRight: 3 }}
                                                 />
-                                                <Text>{}</Text>
+                                                <Text>
+                                                    {item.commentsNumber}
+                                                </Text>
                                             </TouchableOpacity>
                                             <TouchableOpacity
                                                 style={styles.socialBtn}
