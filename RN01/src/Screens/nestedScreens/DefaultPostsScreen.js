@@ -8,25 +8,17 @@ import {
     SafeAreaView,
 } from 'react-native'
 import React, { useState, useEffect } from 'react'
+
 import { FontAwesome } from '@expo/vector-icons'
 import { EvilIcons } from '@expo/vector-icons'
 import db from '../../firebase/firebaseConfig'
-import {
-    collection,
-    onSnapshot,
-    getFirestore,
-    getCountFromServer,
-    query,
-    count,
-    get,
-} from 'firebase/firestore'
+import { collection, onSnapshot, getFirestore } from 'firebase/firestore'
 import { getAuth } from 'firebase/auth'
 
 const basicAvatar = require('../../../assets/images/avatars/cat.jpg')
 
 function DefaultPostsScreen({ navigation }) {
     const [posts, setPosts] = useState([])
-    const [commNum, setCommNum] = useState(0)
 
     const authFirebase = getAuth()
     const user = authFirebase.currentUser
@@ -38,23 +30,6 @@ function DefaultPostsScreen({ navigation }) {
             collection(myDB, 'posts'),
             (querySnapshot) => {
                 const documents = querySnapshot.docs.map((doc) => {
-                    //get comm query size to one post
-
-                    // let commSize
-
-                    // onSnapshot(
-                    //     collection(myDB, `posts/${doc.id}/comments`),
-                    //     (querySnapshot) => {
-                    //         commSize = querySnapshot.size
-
-                    //         posts.forEach((post) => {
-                    //             if (post.id === doc.id) {
-                    //                 setCommNum(commSize)
-                    //             }
-                    //         })
-                    //     }
-                    // )
-
                     return {
                         ...doc.data(),
                         id: doc.id,
@@ -80,7 +55,11 @@ function DefaultPostsScreen({ navigation }) {
                         <Image
                             source={{ uri: user?.photoURL }}
                             title="avatar"
-                            style={{ width: 60, height: 60, borderRadius: 16 }}
+                            style={{
+                                width: 60,
+                                height: 60,
+                                borderRadius: 16,
+                            }}
                         />
                     ) : (
                         basicAvatar
@@ -136,9 +115,7 @@ function DefaultPostsScreen({ navigation }) {
                                                     marginLeft: 5,
                                                 }}
                                             >
-                                                {commNum === undefined
-                                                    ? 0
-                                                    : commNum}
+                                                {item?.commentsNumber}
                                             </Text>
                                         </View>
                                     </TouchableOpacity>

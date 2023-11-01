@@ -9,15 +9,15 @@ import {
     FlatList,
     SafeAreaView,
 } from 'react-native'
-import { useSelector } from 'react-redux'
 import { EvilIcons } from '@expo/vector-icons'
 import db from '../../firebase/firebaseConfig'
 import {
     collection,
     getFirestore,
     addDoc,
-    getDoc,
     onSnapshot,
+    updateDoc,
+    doc,
 } from 'firebase/firestore'
 import { getAuth } from 'firebase/auth'
 
@@ -25,11 +25,11 @@ function CommentsScreen({ route }) {
     const { postId, photo, name } = route.params
     const [comment, setComment] = useState('')
     const [allComm, setAllComm] = useState([])
-    // const totalComm = [];
+
+    let totalCommOnOnePost
     const authFirebase = getAuth()
     const user = authFirebase.currentUser
 
-    // const { nickname, photoURL } = useSelector((state) => state.auth)
     const { displayName, photoURL } = user
 
     const myDB = getFirestore()
@@ -63,14 +63,20 @@ function CommentsScreen({ route }) {
                     }
                 })
 
-                // //get number of comments to one post
-                // const totalCommOnOnePost = querySnapshot.size
-                // console.log(totalCommOnOnePost)
+                //get number of comments to one post
+                totalCommOnOnePost = querySnapshot.size
 
                 setAllComm(documents)
+                updateDocInfo()
             }
         )
         return () => commQuery()
+    }
+
+    const updateDocInfo = async () => {
+        await updateDoc(doc(myDB, 'posts', `${postId}`), {
+            commentsNumber: totalCommOnOnePost,
+        })
     }
 
     useEffect(() => {
