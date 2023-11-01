@@ -8,13 +8,14 @@ import {
     Image,
     FlatList,
     SafeAreaView,
+    RefreshControl,
+    ScrollView,
 } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import AvatarInput from '../../components/common/Avatar'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { authLogOutUser } from '../../redux/auth/authOperations'
 import { useDispatch, useSelector } from 'react-redux'
-import db from '../../firebase/firebaseConfig'
 import {
     getFirestore,
     collection,
@@ -31,6 +32,7 @@ const bgImg = require('../../../assets/images/bg-img-1x.jpg')
 
 function ProfileScreen({ navigation }) {
     const [profilePosts, setProfilePosts] = useState([])
+    const [refreshing, setRefreshing] = useState(false)
     const dispatch = useDispatch()
     const myDB = getFirestore()
     const authFirebase = getAuth()
@@ -40,6 +42,14 @@ function ProfileScreen({ navigation }) {
     const logout = () => {
         dispatch(authLogOutUser())
     }
+
+    const onRefresh = React.useCallback(() => {
+        setRefreshing(true)
+        setTimeout(() => {
+            setRefreshing(false)
+        }, 150)
+        getUserPosts()
+    }, [])
 
     const getUserPosts = async () => {
         const q = query(
@@ -57,25 +67,24 @@ function ProfileScreen({ navigation }) {
     }
 
     const putLikeToPost = async (item) => {
-        if (user) {
-            const itemId = item.id
+        const itemId = item.id
 
-            const batch = writeBatch(myDB)
-            const docRef = doc(myDB, 'posts', `${itemId}`)
+        const batch = writeBatch(myDB)
+        const docRef = doc(myDB, 'posts', `${itemId}`)
 
-            batch.update(docRef, { likes: increment(1) })
-            batch
-                .commit()
-                .then(() => {
-                    console.log(item.likes, item.id)
-                    alert('Post liked!')
-                })
-                .then(() => getUserPosts())
-        }
+        batch.update(docRef, { likes: increment(1) })
+        batch
+            .commit()
+            .then(() => {
+                console.log(item.likes, item.id)
+                alert('Post liked!')
+            })
+            .then(() => getUserPosts())
     }
 
     useEffect(() => {
         getUserPosts()
+        console.log('updated')
     }, [])
 
     return (
@@ -102,93 +111,108 @@ function ProfileScreen({ navigation }) {
                     <Text style={styles.title}>{user?.displayName}</Text>
 
                     <SafeAreaView style={styles.postContainer}>
-                        <FlatList
-                            data={profilePosts}
-                            keyExtractor={(item) => item.id}
-                            renderItem={({ item }) => (
-                                <View style={styles.onePost}>
-                                    <Image
-                                        source={{ uri: item.photo }}
-                                        alt={`${item.name}`}
-                                        style={styles.postImage}
-                                    />
-                                    <Text style={styles.postTitle}>
-                                        {item.name}
-                                    </Text>
+                        <ScrollView
+                            refreshControl={
+                                <RefreshControl
+                                    refreshing={refreshing}
+                                    onRefresh={onRefresh}
+                                />
+                            }
+                        >
+                            <FlatList
+                                data={profilePosts}
+                                keyExtractor={(item) => item.id}
+                                renderItem={({ item }) => (
+                                    <View style={styles.onePost}>
+                                        <Image
+                                            source={{ uri: item.photo }}
+                                            alt={`${item.name}`}
+                                            style={styles.postImage}
+                                        />
+                                        <Text style={styles.postTitle}>
+                                            {item.name}
+                                        </Text>
 
-                                    <View style={styles.postSocials}>
-                                        <View
-                                            style={{
-                                                display: 'flex',
-                                                flexDirection: 'row',
-                                            }}
-                                        >
+                                        <View style={styles.postSocials}>
+                                            <View
+                                                style={{
+                                                    display: 'flex',
+                                                    flexDirection: 'row',
+                                                }}
+                                            >
+                                                <TouchableOpacity
+                                                    style={styles.socialBtn}
+                                                    onPress={() => {
+                                                        navigation.navigate(
+                                                            'Comments',
+                                                            {
+                                                                postId: item.id,
+                                                                photo: item.photo,
+                                                                name: item.name,
+                                                            }
+                                                        )
+                                                    }}
+                                                >
+                                                    <FontAwesome
+                                                        name="comments"
+                                                        size={24}
+                                                        color="#FF6C00"
+                                                        style={{
+                                                            marginRight: 3,
+                                                        }}
+                                                    />
+                                                    <Text>
+                                                        {item.commentsNumber}
+                                                    </Text>
+                                                </TouchableOpacity>
+                                                <TouchableOpacity
+                                                    style={styles.socialBtn}
+                                                    onPress={() => {
+                                                        putLikeToPost(item)
+                                                    }}
+                                                >
+                                                    <Feather
+                                                        name="thumbs-up"
+                                                        size={24}
+                                                        color="#FF6C00"
+                                                        style={{
+                                                            marginRight: 3,
+                                                        }}
+                                                    />
+                                                    <Text>{item.likes}</Text>
+                                                </TouchableOpacity>
+                                            </View>
                                             <TouchableOpacity
                                                 style={styles.socialBtn}
-                                                onPress={() => {
+                                                onPress={() =>
                                                     navigation.navigate(
-                                                        'Comments',
+                                                        'MapScreen',
                                                         {
-                                                            postId: item.id,
-                                                            photo: item.photo,
-                                                            name: item.name,
+                                                            locationCoords:
+                                                                item.locationCoords,
+                                                            locationName:
+                                                                item.locationName,
                                                         }
                                                     )
-                                                }}
-                                            >
-                                                <FontAwesome
-                                                    name="comments"
-                                                    size={24}
-                                                    color="#FF6C00"
-                                                    style={{ marginRight: 3 }}
-                                                />
-                                                <Text>
-                                                    {item.commentsNumber}
-                                                </Text>
-                                            </TouchableOpacity>
-                                            <TouchableOpacity
-                                                style={styles.socialBtn}
-                                                onPress={() => {
-                                                    putLikeToPost(item)
-                                                }}
+                                                }
                                             >
                                                 <Feather
-                                                    name="thumbs-up"
+                                                    name="map-pin"
                                                     size={24}
-                                                    color="#FF6C00"
+                                                    color="#BDBDBD"
                                                     style={{ marginRight: 3 }}
                                                 />
-                                                <Text>{item.likes}</Text>
+                                                <Text
+                                                    style={styles.locationText}
+                                                >
+                                                    {item.locationName}
+                                                </Text>
                                             </TouchableOpacity>
                                         </View>
-                                        <TouchableOpacity
-                                            style={styles.socialBtn}
-                                            onPress={() =>
-                                                navigation.navigate(
-                                                    'MapScreen',
-                                                    {
-                                                        locationCoords:
-                                                            item.locationCoords,
-                                                        locationName:
-                                                            item.locationName,
-                                                    }
-                                                )
-                                            }
-                                        >
-                                            <Feather
-                                                name="map-pin"
-                                                size={24}
-                                                color="#BDBDBD"
-                                                style={{ marginRight: 3 }}
-                                            />
-                                            <Text style={styles.locationText}>
-                                                {item.locationName}
-                                            </Text>
-                                        </TouchableOpacity>
                                     </View>
-                                </View>
-                            )}
-                        />
+                                )}
+                            />
+                        </ScrollView>
                     </SafeAreaView>
                 </View>
             </ImageBackground>
