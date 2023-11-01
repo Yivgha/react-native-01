@@ -21,13 +21,13 @@ import {
     query,
     where,
     getDocs,
-    onSnapshot,
-    getCountFromServer,
+    doc,
+    increment,
+    writeBatch,
 } from 'firebase/firestore'
 import { getAuth } from 'firebase/auth'
 
 const bgImg = require('../../../assets/images/bg-img-1x.jpg')
-// const basicAvatar = require("../../../assets/images/avatars/cat.jpg")
 
 function ProfileScreen({ navigation }) {
     const [profilePosts, setProfilePosts] = useState([])
@@ -54,6 +54,24 @@ function ProfileScreen({ navigation }) {
             }
         })
         setProfilePosts(documents)
+    }
+
+    const putLikeToPost = async (item) => {
+        if (user) {
+            const itemId = item.id
+
+            const batch = writeBatch(myDB)
+            const docRef = doc(myDB, 'posts', `${itemId}`)
+
+            batch.update(docRef, { likes: increment(1) })
+            batch
+                .commit()
+                .then(() => {
+                    console.log(item.likes, item.id)
+                    alert('Post liked!')
+                })
+                .then(() => getUserPosts())
+        }
     }
 
     useEffect(() => {
@@ -130,6 +148,9 @@ function ProfileScreen({ navigation }) {
                                             </TouchableOpacity>
                                             <TouchableOpacity
                                                 style={styles.socialBtn}
+                                                onPress={() => {
+                                                    putLikeToPost(item)
+                                                }}
                                             >
                                                 <Feather
                                                     name="thumbs-up"
@@ -137,7 +158,7 @@ function ProfileScreen({ navigation }) {
                                                     color="#FF6C00"
                                                     style={{ marginRight: 3 }}
                                                 />
-                                                <Text>put</Text>
+                                                <Text>{item.likes}</Text>
                                             </TouchableOpacity>
                                         </View>
                                         <TouchableOpacity
