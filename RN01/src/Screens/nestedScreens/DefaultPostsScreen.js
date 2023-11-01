@@ -6,6 +6,8 @@ import {
     FlatList,
     TouchableOpacity,
     SafeAreaView,
+    RefreshControl,
+    ScrollView,
 } from 'react-native'
 import React, { useState, useEffect } from 'react'
 
@@ -19,6 +21,7 @@ const basicAvatar = require('../../../assets/images/avatars/cat.jpg')
 
 function DefaultPostsScreen({ navigation }) {
     const [posts, setPosts] = useState([])
+    const [refreshing, setRefreshing] = useState(false)
 
     const authFirebase = getAuth()
     const user = authFirebase.currentUser
@@ -42,6 +45,14 @@ function DefaultPostsScreen({ navigation }) {
 
         return () => postsQuery()
     }
+
+    const onRefresh = React.useCallback(() => {
+        setRefreshing(true)
+        setTimeout(() => {
+            setRefreshing(false)
+        }, 150)
+        getAllPosts()
+    }, [])
 
     useEffect(() => {
         getAllPosts()
@@ -72,89 +83,106 @@ function DefaultPostsScreen({ navigation }) {
             </View>
             <View style={styles.flatList}>
                 <SafeAreaView>
-                    <FlatList
-                        data={posts}
-                        keyExtractor={(item) => item.id}
-                        renderItem={({ item }) => (
-                            <View style={styles.onepost}>
-                                <Image
-                                    source={{ uri: item.photo }}
-                                    style={{
-                                        height: 240,
-                                        width: 380,
-                                        borderRadius: 10,
-                                    }}
-                                />
-                                <Text style={styles.photoName}>
-                                    {item.name}
-                                </Text>
-                                <View style={styles.postIcons}>
-                                    <TouchableOpacity
-                                        onPress={() =>
-                                            navigation.navigate('Comments', {
-                                                postId: item.id,
-                                                photo: item.photo,
-                                                name: item.name,
-                                            })
-                                        }
-                                    >
-                                        <View
-                                            style={{
-                                                display: 'flex',
-                                                flexDirection: 'row',
-                                                margin: 0,
-                                            }}
+                    <ScrollView
+                        refreshControl={
+                            <RefreshControl
+                                refreshing={refreshing}
+                                onRefresh={onRefresh}
+                            />
+                        }
+                    >
+                        <FlatList
+                            data={posts}
+                            keyExtractor={(item) => item.id}
+                            renderItem={({ item }) => (
+                                <View style={styles.onepost}>
+                                    <Image
+                                        source={{ uri: item.photo }}
+                                        style={{
+                                            height: 240,
+                                            width: 380,
+                                            borderRadius: 10,
+                                        }}
+                                    />
+                                    <Text style={styles.photoName}>
+                                        {item.name}
+                                    </Text>
+                                    <View style={styles.postIcons}>
+                                        <TouchableOpacity
+                                            onPress={() =>
+                                                navigation.navigate(
+                                                    'Comments',
+                                                    {
+                                                        postId: item.id,
+                                                        photo: item.photo,
+                                                        name: item.name,
+                                                    }
+                                                )
+                                            }
                                         >
-                                            <FontAwesome
-                                                name="comments"
-                                                size={24}
-                                                color="#BDBDBD"
-                                            />
-                                            <Text
+                                            <View
                                                 style={{
-                                                    marginLeft: 5,
+                                                    display: 'flex',
+                                                    flexDirection: 'row',
+                                                    margin: 0,
                                                 }}
                                             >
-                                                {item?.commentsNumber}
-                                            </Text>
-                                        </View>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity
-                                        onPress={() =>
-                                            navigation.navigate('MapScreen', {
-                                                locationCoords:
-                                                    item.locationCoords,
-                                                locationName: item.locationName,
-                                            })
-                                        }
-                                    >
-                                        <View
-                                            style={{
-                                                display: 'flex',
-                                                flexDirection: 'row',
-                                                margin: 0,
-                                            }}
+                                                <FontAwesome
+                                                    name="comments"
+                                                    size={24}
+                                                    color="#BDBDBD"
+                                                />
+                                                <Text
+                                                    style={{
+                                                        marginLeft: 5,
+                                                    }}
+                                                >
+                                                    {item?.commentsNumber}
+                                                </Text>
+                                            </View>
+                                        </TouchableOpacity>
+                                        <TouchableOpacity
+                                            onPress={() =>
+                                                navigation.navigate(
+                                                    'MapScreen',
+                                                    {
+                                                        locationCoords:
+                                                            item.locationCoords,
+                                                        locationName:
+                                                            item.locationName,
+                                                    }
+                                                )
+                                            }
                                         >
-                                            <EvilIcons
-                                                name="location"
-                                                size={24}
-                                                color="#BDBDBD"
-                                            />
-                                            <Text
+                                            <View
                                                 style={{
-                                                    textTransform: 'uppercase',
-                                                    textDecorationLine:
-                                                        'underline',
+                                                    display: 'flex',
+                                                    flexDirection: 'row',
+                                                    margin: 0,
                                                 }}
                                             >
-                                                {item.locationName}
-                                            </Text>
-                                        </View>
-                                    </TouchableOpacity>
+                                                <EvilIcons
+                                                    name="location"
+                                                    size={24}
+                                                    color="#BDBDBD"
+                                                />
+                                                <Text
+                                                    style={{
+                                                        textTransform:
+                                                            'uppercase',
+                                                        textDecorationLine:
+                                                            'underline',
+                                                    }}
+                                                >
+                                                    {item.locationName}
+                                                </Text>
+                                            </View>
+                                        </TouchableOpacity>
+                                    </View>
                                 </View>
-                            </View>
-                        )}
-                    />
+                            )}
+                        />
+                    </ScrollView>
                 </SafeAreaView>
             </View>
         </View>
