@@ -91,11 +91,13 @@ function DefaultPostsScreen({ navigation }) {
                             />
                         }
                     >
-                        <FlatList
-                            data={posts}
-                            keyExtractor={(item) => item.id}
-                            renderItem={({ item }) => (
-                                <View style={styles.onepost}>
+                        <View>
+                            {posts.map((item) => (
+                                <View
+                                    style={styles.onepost}
+                                    key={item.id}
+                                    id={item.id}
+                                >
                                     <Image
                                         source={{ uri: item.photo }}
                                         style={{
@@ -180,8 +182,15 @@ function DefaultPostsScreen({ navigation }) {
                                         </TouchableOpacity>
                                     </View>
                                 </View>
-                            )}
-                        />
+                            ))}
+                            {/* <FlatList
+                                data={posts}
+                                keyExtractor={(item) => item.id}
+                                renderItem={({ item }) => (
+                                    
+                                )}
+                            /> */}
+                        </View>
                     </ScrollView>
                 </SafeAreaView>
             </View>
