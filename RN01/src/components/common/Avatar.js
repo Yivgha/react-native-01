@@ -1,7 +1,12 @@
 import { useState } from 'react'
 import { StyleSheet, View, Image, TouchableOpacity } from 'react-native'
 import * as ImagePicker from 'expo-image-picker'
-import { getAuth, updateProfile } from 'firebase/auth'
+import {
+    getAuth,
+    updateProfile,
+    getReactNativePersistence,
+} from 'firebase/auth'
+import ReactNativeAsyncStorage from '@rea'
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 
 const noAvatar = require('../../../assets/images/no-avatar-1x.png')
@@ -10,11 +15,12 @@ const deleteBtnImg = require('../../../assets/images/cancel-circle.png')
 
 const AvatarInput = ({ value, onChange, style, ...props }) => {
     const authFirebase = getAuth()
+    initializeAuth(authFirebase, {
+        persistence: getReactNativePersistence(ReactNativeAsyncStorage),
+    })
     const user = authFirebase.currentUser
 
-    const [image, setImage] = useState(
-        user?.photoURL !== null ? user?.photoURL : null
-    )
+    const [image, setImage] = useState(user?.photoURL || null)
 
     const uploadAvatarToServer = async (image) => {
         const response = await fetch(image)
