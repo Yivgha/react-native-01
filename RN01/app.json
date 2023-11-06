@@ -1,39 +1,45 @@
 {
-    "expo": {
-        "name": "Basic App",
-        "slug": "basic-app",
-        "version": "1.0.0",
-        "description": "Try your photo journey with this app.",
-        "orientation": "default",
-        "icon": "./assets/photo.png",
-        "userInterfaceStyle": "light",
-        "splash": {
-            "image": "./assets/cuteAIsplash.png",
-            "resizeMode": "contain",
-            "backgroundColor": "#ffffff"
-        },
-        "updates": {
-            "fallbackToCacheTimeout": 0
-        },
-        "assetBundlePatterns": ["**/*"],
-        "ios": {
-            "supportsTablet": true,
-            "bundleIdentifier": "com.yivgha.RN01"
-        },
-        "android": {
-            "adaptiveIcon": {
-                "foregroundImage": "./assets/splash",
-                "backgroundColor": "#FFFFFF"
-            },
-            "package": "com.yivgha.RN01"
-        },
-        "web": {
-            "favicon": "./assets/photo.ico"
-        },
-        "extra": {
-            "eas": {
-                "projectId": "703e800c-209b-4aa9-81d4-93165870d23e"
-            }
-        }
+  "expo": {
+    "name": "Basic App",
+    "slug": "RN01",
+    "version": "1.0.0",
+    "description": "Try your photo journey with this app.",
+    "orientation": "default",
+    "icon": "./assets/photo.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/cuteAIsplash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0,
+      "url": "https://u.expo.dev/703e800c-209b-4aa9-81d4-93165870d23e"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.yivgha.RN01"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/cuteAIsplash.png",
+        "backgroundColor": "#FFFFFF"
+      },
+      "package": "com.yivgha.RN01"
+    },
+    "web": {
+      "favicon": "./assets/photo.ico"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "703e800c-209b-4aa9-81d4-93165870d23e"
+      }
+    },
+    "runtimeVersion": {
+      "policy": "sdkVersion"
     }
+  }
 }
