@@ -8,7 +8,7 @@
         "icon": "./assets/photo.png",
         "userInterfaceStyle": "light",
         "splash": {
-            "image": "./assets/splash.jpg",
+            "image": "./assets/cuteAIsplash.png",
             "resizeMode": "contain",
             "backgroundColor": "#ffffff"
         },
