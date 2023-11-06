@@ -1,39 +1,39 @@
 {
-  "expo": {
-    "name": "RN01",
-    "slug": "RN01",
-    "version": "1.0.0",
-    "orientation": "default",
-    "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
-    "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
-    "updates": {
-      "fallbackToCacheTimeout": 0
-    },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
-    "ios": {
-      "supportsTablet": true
-    },
-    "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#FFFFFF"
-      },
-      "package": "com.yivgha.RN01"
-    },
-    "web": {
-      "favicon": "./assets/favicon.png"
-    },
-    "extra": {
-      "eas": {
-        "projectId": "703e800c-209b-4aa9-81d4-93165870d23e"
-      }
+    "expo": {
+        "name": "Basic App",
+        "slug": "basic-app",
+        "version": "1.0.0",
+        "description": "Try your photo journey with this app.",
+        "orientation": "default",
+        "icon": "./assets/photo.png",
+        "userInterfaceStyle": "light",
+        "splash": {
+            "image": "./assets/splash.jpg",
+            "resizeMode": "contain",
+            "backgroundColor": "#ffffff"
+        },
+        "updates": {
+            "fallbackToCacheTimeout": 0
+        },
+        "assetBundlePatterns": ["**/*"],
+        "ios": {
+            "supportsTablet": true,
+            "bundleIdentifier": "com.yivgha.RN01"
+        },
+        "android": {
+            "adaptiveIcon": {
+                "foregroundImage": "./assets/splash",
+                "backgroundColor": "#FFFFFF"
+            },
+            "package": "com.yivgha.RN01"
+        },
+        "web": {
+            "favicon": "./assets/photo.ico"
+        },
+        "extra": {
+            "eas": {
+                "projectId": "703e800c-209b-4aa9-81d4-93165870d23e"
+            }
+        }
     }
-  }
 }
