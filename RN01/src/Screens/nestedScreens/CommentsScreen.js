@@ -169,7 +169,6 @@ const styles = StyleSheet.create({
         paddingTop: 10,
         paddingBottom: 5,
         borderRadius: 10,
-        border: 'transparent',
     },
     commentInputBox: {
         width: 340,
@@ -188,8 +187,6 @@ const styles = StyleSheet.create({
     commentInput: {
         height: 50,
         width: 280,
-        outline: 'none',
-        border: 'none',
     },
     oneComment: {
         overflowY: 'scroll',
@@ -208,14 +205,11 @@ const styles = StyleSheet.create({
         height: 40,
         marginRight: 10,
         borderRadius: 30,
-        border: 'transparent',
-        outline: 'none',
         alignItems: 'center',
         justifyContent: 'center',
         borderWidth: 1,
     },
     commText: {
-        border: 'transparent',
         borderTopRightRadius: 10,
         borderBottomRightRadius: 10,
         width: 270,
@@ -235,8 +229,6 @@ const styles = StyleSheet.create({
         width: 34,
         height: 34,
         borderRadius: 50,
-        border: 'transparent',
-        outline: 'none',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
