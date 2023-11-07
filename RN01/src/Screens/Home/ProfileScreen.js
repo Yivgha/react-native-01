@@ -10,6 +10,7 @@ import {
     SafeAreaView,
     RefreshControl,
     ScrollView,
+    Dimensions,
 } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import AvatarInput from '../../components/common/Avatar'
@@ -29,6 +30,11 @@ import {
 import { getAuth } from 'firebase/auth'
 
 const bgImg = require('../../../assets/images/bg-img-1x.jpg')
+
+const units = {
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height,
+}
 
 function ProfileScreen({ navigation }) {
     const [profilePosts, setProfilePosts] = useState([])
@@ -129,95 +135,110 @@ function ProfileScreen({ navigation }) {
                                 data={profilePosts}
                                 scrollEnabled={false}
                                 keyExtractor={(item) => item.id}
-                                renderItem={({ item }) => (
-                                    <View style={styles.onePost}>
-                                        <Image
-                                            source={{ uri: item.photo }}
-                                            alt={`${item.name}`}
-                                            style={styles.postImage}
-                                        />
-                                        <Text style={styles.postTitle}>
-                                            {item.name}
-                                        </Text>
+                                renderItem={({ item }) => {
+                                    return (
+                                        <View style={styles.onePost}>
+                                            <Image
+                                                source={{ uri: item.photo }}
+                                                alt={`${item.name}`}
+                                                style={styles.postImage}
+                                                resizeMode="center"
+                                                resizeMethod="scale"
+                                            />
+                                            <Text style={styles.postTitle}>
+                                                {item.name}
+                                            </Text>
 
-                                        <View style={styles.postSocials}>
-                                            <View
-                                                style={{
-                                                    display: 'flex',
-                                                    flexDirection: 'row',
-                                                }}
-                                            >
-                                                <TouchableOpacity
-                                                    style={styles.socialBtn}
-                                                    onPress={() => {
-                                                        navigation.navigate(
-                                                            'Comments',
+                                            <View style={styles.postSocials}>
+                                                <View
+                                                    style={{
+                                                        display: 'flex',
+                                                        flexDirection: 'row',
+                                                    }}
+                                                >
+                                                    <TouchableOpacity
+                                                        style={styles.socialBtn}
+                                                        onPress={() => {
+                                                            navigation.navigate(
+                                                                'Comments',
+                                                                {
+                                                                    postId: item.id,
+                                                                    photo: item.photo,
+                                                                    name: item.name,
+                                                                }
+                                                            )
+                                                        }}
+                                                    >
+                                                        <FontAwesome
+                                                            name="comments"
+                                                            size={24}
+                                                            color="#FF6C00"
+                                                            style={{
+                                                                marginRight: 3,
+                                                            }}
+                                                        />
+                                                        <Text>
                                                             {
-                                                                postId: item.id,
-                                                                photo: item.photo,
-                                                                name: item.name,
+                                                                item.commentsNumber
+                                                            }
+                                                        </Text>
+                                                    </TouchableOpacity>
+                                                    <TouchableOpacity
+                                                        style={styles.socialBtn}
+                                                        onPress={() => {
+                                                            putLikeToPost(item)
+                                                        }}
+                                                    >
+                                                        <Feather
+                                                            name="thumbs-up"
+                                                            size={24}
+                                                            color="#FF6C00"
+                                                            style={{
+                                                                marginRight: 3,
+                                                            }}
+                                                        />
+                                                        <Text>
+                                                            {item.likes}
+                                                        </Text>
+                                                    </TouchableOpacity>
+                                                </View>
+                                                <TouchableOpacity
+                                                    style={[
+                                                        styles.socialBtn,
+                                                        { marginLeft: 34 },
+                                                    ]}
+                                                    onPress={() =>
+                                                        navigation.navigate(
+                                                            'MapScreen',
+                                                            {
+                                                                locationCoords:
+                                                                    item.locationCoords,
+                                                                locationName:
+                                                                    item.locationName,
                                                             }
                                                         )
-                                                    }}
-                                                >
-                                                    <FontAwesome
-                                                        name="comments"
-                                                        size={24}
-                                                        color="#FF6C00"
-                                                        style={{
-                                                            marginRight: 3,
-                                                        }}
-                                                    />
-                                                    <Text>
-                                                        {item.commentsNumber}
-                                                    </Text>
-                                                </TouchableOpacity>
-                                                <TouchableOpacity
-                                                    style={styles.socialBtn}
-                                                    onPress={() => {
-                                                        putLikeToPost(item)
-                                                    }}
+                                                    }
                                                 >
                                                     <Feather
-                                                        name="thumbs-up"
+                                                        name="map-pin"
                                                         size={24}
-                                                        color="#FF6C00"
+                                                        color="#BDBDBD"
                                                         style={{
                                                             marginRight: 3,
                                                         }}
                                                     />
-                                                    <Text>{item.likes}</Text>
+                                                    <Text
+                                                        style={
+                                                            styles.locationText
+                                                        }
+                                                    >
+                                                        {item.locationName}
+                                                    </Text>
                                                 </TouchableOpacity>
                                             </View>
-                                            <TouchableOpacity
-                                                style={styles.socialBtn}
-                                                onPress={() =>
-                                                    navigation.navigate(
-                                                        'MapScreen',
-                                                        {
-                                                            locationCoords:
-                                                                item.locationCoords,
-                                                            locationName:
-                                                                item.locationName,
-                                                        }
-                                                    )
-                                                }
-                                            >
-                                                <Feather
-                                                    name="map-pin"
-                                                    size={24}
-                                                    color="#BDBDBD"
-                                                    style={{ marginRight: 3 }}
-                                                />
-                                                <Text
-                                                    style={styles.locationText}
-                                                >
-                                                    {item.locationName}
-                                                </Text>
-                                            </TouchableOpacity>
                                         </View>
-                                    </View>
-                                )}
+                                    )
+                                }}
                             />
                         </ScrollView>
                     </SafeAreaView>
@@ -230,11 +251,15 @@ const styles = StyleSheet.create({
     wrapper: {
         flex: 1,
         backgroundColor: '#fff',
+        width: units.width / 1,
+        height: units.height / 1,
     },
     image: {
         flex: 1,
         resizeMode: 'cover',
         justifyContent: 'flex-end',
+        width: units.width / 1,
+        height: units.height / 1,
     },
     container: {
         backgroundColor: '#FFFFFF',
@@ -259,18 +284,24 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     postContainer: {
-        width: 380,
+        width: 330,
         height: 350,
         paddingBottomg: 10,
     },
     onePost: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: units.width * 1,
         marginBottom: 20,
         paddingBottom: 5,
     },
     postImage: {
-        width: 380,
-        height: 240,
+        aspectRatio: 1,
+        width: units.width * 1,
+        height: units.height * 0.4,
         marginBottom: 15,
+        marginRight: 30,
         borderRadius: 8,
     },
     postTitle: {
@@ -283,11 +314,8 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
     },
     postSocials: {
-        display: 'flex',
         flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        paddingHorizontal: 10,
+        justifyContent: 'space-beteween',
     },
     socialBtn: {
         display: 'flex',
@@ -299,9 +327,8 @@ const styles = StyleSheet.create({
     locationText: {
         textDecorationLine: 'underline',
         color: '#212121',
-        marginLeft: 4,
         fontFamily: 'Roboto-Regular',
-        fontSize: 16,
+        fontSize: 12,
         lineHeight: 19,
         textTransform: 'uppercase',
     },
