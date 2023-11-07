@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit'
 
 const state = {
     userId: null,
@@ -8,13 +8,21 @@ const state = {
 }
 
 export const authSlice = createSlice({
-    name: "auth",
+    name: 'auth',
     initialState: state,
     reducers: {
-        updateUserProfile: (state, { payload }) => ({ ...state, userId: payload.userId, nickname: payload.nickname }),
-        authStateChange: (state, { payload }) => ({ ...state, stateChange: payload.stateChange }),
-        authLogOut: () => state
-    }
+        updateUserProfile: (state, { payload }) => ({
+            ...state,
+            userId: payload.userId,
+            nickname: payload.nickname,
+            avatar: payload.photoURL,
+        }),
+        authStateChange: (state, { payload }) => ({
+            ...state,
+            stateChange: payload.stateChange,
+        }),
+        authLogOut: () => state,
+    },
 })
 
-// console.log("authSlice", authSlice);
+// console.log("authSlice", authSlice)

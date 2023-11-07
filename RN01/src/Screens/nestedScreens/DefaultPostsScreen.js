@@ -70,10 +70,22 @@ function DefaultPostsScreen({ navigation }) {
                                 width: 60,
                                 height: 60,
                                 borderRadius: 16,
+                                borderWidth: 1,
+                                borderColor: '#FF6C00',
                             }}
                         />
                     ) : (
-                        basicAvatar
+                        <Image
+                            source={basicAvatar}
+                            title="basicAvatar"
+                            style={{
+                                borderWidth: 1,
+                                borderColor: '#FF6C00',
+                                width: 60,
+                                height: 60,
+                                borderRadius: 16,
+                            }}
+                        />
                     )}
                 </View>
                 <View style={styles.credentials}>
@@ -91,8 +103,11 @@ function DefaultPostsScreen({ navigation }) {
                             />
                         }
                     >
-                        <View>
-                            {posts.map((item) => (
+                        <FlatList
+                            data={posts}
+                            scrollEnabled={false}
+                            keyExtractor={(item) => item.id}
+                            renderItem={({ item }) => (
                                 <View
                                     style={styles.onepost}
                                     key={item.id}
@@ -182,15 +197,8 @@ function DefaultPostsScreen({ navigation }) {
                                         </TouchableOpacity>
                                     </View>
                                 </View>
-                            ))}
-                            {/* <FlatList
-                                data={posts}
-                                keyExtractor={(item) => item.id}
-                                renderItem={({ item }) => (
-                                    
-                                )}
-                            /> */}
-                        </View>
+                            )}
+                        />
                     </ScrollView>
                 </SafeAreaView>
             </View>
@@ -215,8 +223,10 @@ const styles = StyleSheet.create({
     avatar: {
         width: 60,
         hieght: 60,
-        borderRadius: 16,
         marginRight: 8,
+        borderWidth: 1,
+        borderColor: '#FF6C00',
+        borderRadius: 16,
     },
     credentials: {
         flexDirection: 'column',

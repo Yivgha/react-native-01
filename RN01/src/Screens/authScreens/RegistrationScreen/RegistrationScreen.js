@@ -17,7 +17,7 @@ import AvatarInput from '../../../components/common/Avatar'
 import CustomInput from '../../../components/common/CustomTextInput'
 import { useKeyboardStatus } from '../../../hooks/isOpen'
 import { useDispatch } from 'react-redux'
-import { authSignUpUser } from "../../../redux/auth/authOperations"
+import { authSignUpUser } from '../../../redux/auth/authOperations'
 import db from '../../../firebase/firebaseConfig'
 
 const units = {
@@ -29,11 +29,9 @@ const initialState = {
     nickname: '',
     email: '',
     password: '',
-    photoURL: ""
+    photoURL: '',
 }
 const bgImg = require('../../../../assets/images/bg-img-1x.jpg')
-
-
 
 export default function RegistrationForm({ navigation }) {
     const [isShowKeyboard, setIsShowKeyboard] = useState(false)
@@ -41,12 +39,12 @@ export default function RegistrationForm({ navigation }) {
     const [isSecureEntry, setIsSecureEntry] = useState(true)
     const [state, setState] = useState(initialState)
 
-    const dispatch = useDispatch();
+    const dispatch = useDispatch()
 
     const submitForm = () => {
         setIsShowKeyboard(true)
         Keyboard.dismiss()
-        console.log("state:", JSON.stringify(state))
+        console.log('state:', JSON.stringify(state))
 
         dispatch(authSignUpUser(state))
         setState(initialState)
@@ -70,7 +68,15 @@ export default function RegistrationForm({ navigation }) {
                                 Platform.OS === 'ios' ? 'padding' : 'height'
                             }
                         >
-                            <AvatarInput value={state?.photoURL} />
+                            <AvatarInput
+                                value={state?.photoURL}
+                                style={{
+                                    borderRadius: 16,
+                                    borderWidth: 1,
+                                    borderColor: '#FF6C00',
+                                    backgroundColor: '#f6f6f6',
+                                }}
+                            />
                             <Text style={styles.title}>Registration</Text>
                             <CustomInput
                                 value={state.nickname}

@@ -84,7 +84,8 @@ function ProfileScreen({ navigation }) {
 
     useEffect(() => {
         getUserPosts()
-        console.log('updated')
+        console.log('Profile page refreshed')
+        // console.log(user)
     }, [])
 
     return (
@@ -94,7 +95,12 @@ function ProfileScreen({ navigation }) {
                     <View style={styles.topBox}>
                         <AvatarInput
                             value={user?.photoURL}
-                            style={{ borderRadius: 16 }}
+                            style={{
+                                borderRadius: 16,
+                                borderWidth: 1,
+                                borderColor: '#FF6C00',
+                                backgroundColor: '#f6f6f6',
+                            }}
                         />
                         <TouchableOpacity onPress={logout}>
                             <Feather
@@ -121,6 +127,7 @@ function ProfileScreen({ navigation }) {
                         >
                             <FlatList
                                 data={profilePosts}
+                                scrollEnabled={false}
                                 keyExtractor={(item) => item.id}
                                 renderItem={({ item }) => (
                                     <View style={styles.onePost}>

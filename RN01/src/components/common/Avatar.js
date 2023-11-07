@@ -2,9 +2,11 @@ import { useState } from 'react'
 import { StyleSheet, View, Image, TouchableOpacity } from 'react-native'
 import * as ImagePicker from 'expo-image-picker'
 import { getAuth, updateProfile } from 'firebase/auth'
+
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 
-const noAvatar = require('../../../assets/images/no-avatar-1x.png')
+// const noAvatar = require('../../../assets/images/no-avatar-1x.png')
+const cat = require('../../../assets/images/avatars/cat.jpg')
 const addBtnImg = require('../../../assets/images/add-btn.png')
 const deleteBtnImg = require('../../../assets/images/cancel-circle.png')
 
@@ -12,9 +14,7 @@ const AvatarInput = ({ value, onChange, style, ...props }) => {
     const authFirebase = getAuth()
     const user = authFirebase.currentUser
 
-    const [image, setImage] = useState(
-        user?.photoURL !== null ? user?.photoURL : null
-    )
+    const [image, setImage] = useState(user !== null ? user?.photoURL : null)
 
     const uploadAvatarToServer = async (image) => {
         const response = await fetch(image)
@@ -34,7 +34,7 @@ const AvatarInput = ({ value, onChange, style, ...props }) => {
 
     const updateProfilePic = async (image) => {
         try {
-            await uploadAvatarToServer(image, user.uid)
+            await uploadAvatarToServer(image, user?.uid)
 
             await updateProfile(user, {
                 photoURL: image,
@@ -53,13 +53,14 @@ const AvatarInput = ({ value, onChange, style, ...props }) => {
         })
         if (!result.canceled) {
             setImage(result.assets[0].uri)
+            updateProfilePic(result.assets[0].uri)
         } else {
             alert("You didn't select any photo")
         }
     }
 
     const onReset = () => {
-        setImage('')
+        setImage(null)
     }
 
     return (
@@ -78,7 +79,10 @@ const AvatarInput = ({ value, onChange, style, ...props }) => {
                     {...props}
                 />
             ) : (
-                <Image source={noAvatar} style={styles.noAvatar} />
+                <Image
+                    source={cat}
+                    style={[{ width: 120, height: 120 }, style]}
+                />
             )}
             <TouchableOpacity style={styles.avatarBtn}>
                 <View
@@ -99,7 +103,7 @@ const AvatarInput = ({ value, onChange, style, ...props }) => {
                                 style={[
                                     { width: 25 },
                                     { height: 25 },
-                                    { tintColor: '#F6F6F6' },
+                                    { tintColor: '#000000' },
                                     { backgroundColor: '#ffffff' },
                                     { borderRadius: 12 },
                                 ]}

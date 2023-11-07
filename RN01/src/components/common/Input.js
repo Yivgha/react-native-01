@@ -74,6 +74,5 @@ const styles = StyleSheet.create({
         fontSize: 16,
         lineHeight: 19,
         borderWidth: 0,
-        outlineStyle: 'none',
     },
 })
